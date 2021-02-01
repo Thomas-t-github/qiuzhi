@@ -21,7 +21,7 @@
     `created_date` DATETIME NOT NULL,
     `head_url` varchar(256) NOT NULL DEFAULT '',
     PRIMARY KEY (`id`),
-    UNIQUE KEY `nick_name` (`nick_name`)
+    UNIQUE KEY `email` (`email`)
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
   DROP TABLE IF EXISTS `login_ticket`;

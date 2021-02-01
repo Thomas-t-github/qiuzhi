@@ -69,21 +69,13 @@ layui.define(['layer', 'laytpl', 'form', 'element', 'upload', 'util'], function(
         data: data,
         url: url,
         success: function(res){
-          /*layer.msg("success：访问成功");*/
           if(res.status === 0) {
-            /*layer.msg("状态为200");*/
             success && success(res);
           } else {
             layer.msg(res.msg || res.code, {shift: 6});
             options.error && options.error();
           }
         }, error: function(e){
-          /*if(e.status === 200){
-            $("#body").html(e);
-          }*/
-
-          //layer.msg("跳转完成"+e.status);
-          //layer.msg("error：访问失败");
           layer.msg('请求异常，请重试', {shift: 6});
           options.error && options.error(e);
         }
@@ -555,26 +547,32 @@ layui.define(['layer', 'laytpl', 'form', 'element', 'upload', 'util'], function(
   });
 
   //表单提交
-  /*form.on('submit(*)', function(data){
+  form.on('submit(*)', function(data){
     var action = $(data.form).attr('action'), button = $(data.elem);
     fly.json(action, data.field, function(res){
       var end = function(){
-        if(res.action){
+        /*if(res.action){
           location.href = res.action;
         } else {
           fly.form[action||button.attr('key')](data.field, data.form);
-        }
+        }*/
       };
       if(res.status == 0){
+        layer.msg(res.msg);
+
+        window.location = "/";
+
         button.attr('alert') ? layer.alert(res.msg, {
           icon: 1,
           time: 10*1000,
           end: end
         }) : end();
+      }else {
+        layer.msg(res.msg);
       };
     });
     return false;
-  });*/
+  });
 
   //加载特定模块
   if(layui.cache.page && layui.cache.page !== 'index'){

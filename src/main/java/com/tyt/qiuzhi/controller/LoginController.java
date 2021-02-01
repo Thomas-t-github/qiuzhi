@@ -10,9 +10,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
+import java.util.HashMap;
 import java.util.Map;
 
 @Controller
@@ -25,8 +27,9 @@ public class LoginController {
     UserService userService;
 
     @RequestMapping(path = {"/reg"}, method = {RequestMethod.POST})
-    public String reg(Model model, @RequestParam("email") String email,
-                      @RequestParam("username") String username,
+    @ResponseBody
+    public Map reg( @RequestParam("email") String email,
+                      @RequestParam("nickname") String nickName,
                       @RequestParam("pass") String password,
                       @RequestParam("repass") String repassword,
                       @RequestParam("vercode") String vercode,
@@ -34,12 +37,19 @@ public class LoginController {
                       @RequestParam(value = "rememberme", defaultValue = "false") boolean rememberme,
                       HttpServletResponse response) {
 
+
+        HashMap<String, Object> result = new HashMap<>();
+
+        int expiredTime = 1;
+        if (rememberme == true) {
+            expiredTime = 5;
+        }
+
+        Map<String, Object> map = userService.register(email, password, nickName, expiredTime);
+
         try {
-            int expiredTime = 1;
-            if (rememberme == true) {
-                expiredTime = 5;
-            }
-            Map<String, Object> map = userService.register(email, password, username, expiredTime);
+
+
 
             if (map.containsKey("ticket")) {
                 Cookie cookie = new Cookie("ticket", map.get("ticket").toString());
@@ -52,15 +62,20 @@ public class LoginController {
                 /*if (StringUtils.isNotBlank(next)){
                     return "redirect:/";
                 }*/
-                return "redirect:/";
+                //return "redirect:/";
+                result.put("status",0);
+                result.put("msg","注册成功！");
+                return result;
+
             } else {
-                model.addAttribute("msg", map.get("msg"));
-                return "/user/reg";
+                map.put("msg", map.get("msg"));
+                return map;
             }
         } catch (Exception e) {
             logger.error("注册异常：" + e.getMessage());
-            model.addAttribute("msg", "服务器错误");
-            return "/user/reg";
+            //model.addAttribute("msg", "服务器错误");
+            map.put("msg", "服务器错误");
+            return map;
         }
 
     }

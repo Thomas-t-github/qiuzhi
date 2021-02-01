@@ -53,6 +53,7 @@ public class UserService {
         user.setCreatedDate(new Date());
 
         userDAO.addUser(user);
+        user = userDAO.selectByEmail(user.getEmail());
 
         String ticket = addLoginTicket(user.getId(),expiredTime);
         if (ticket != null){
