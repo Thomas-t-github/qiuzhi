@@ -2,8 +2,10 @@ package com.tyt.qiuzhi.controller;
 
 import com.tyt.qiuzhi.model.HostHolder;
 import com.tyt.qiuzhi.model.Question;
+import com.tyt.qiuzhi.model.User;
 import com.tyt.qiuzhi.model.ViewObject;
 import com.tyt.qiuzhi.service.QuestionService;
+import com.tyt.qiuzhi.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,6 +21,9 @@ public class HomeController {
 
     @Autowired
     QuestionService questionService;
+
+    @Autowired
+    UserService userService;
 
     @Autowired
     HostHolder hostHolder;
@@ -37,12 +42,12 @@ public class HomeController {
         List<Question> questions = questionService.selectLatestQuestions(userId, offset, limit);
         for (Question question : questions) {
             ViewObject vo = new ViewObject();
-            //User user = userService.selectById(question.getUserId());
+            User user = userService.selectById(question.getUserId());
             String description = question.getDescription();
             question.setDescription(description.substring(0, description.length() > 100 ? 100 : description.length()));
             vo.set("question",question);
             //vo.set("followCount",followService.getFollowerCount(EntityType.ENTITY_QUESTION,question.getId()));
-            //vo.set("user",user);
+            vo.set("user",user);
             vos.add(vo);
         }
         return vos;
