@@ -1,5 +1,8 @@
 package com.tyt.qiuzhi.controller;
 
+import com.tyt.qiuzhi.async.EventModel;
+import com.tyt.qiuzhi.async.EventProducer;
+import com.tyt.qiuzhi.async.EventType;
 import com.tyt.qiuzhi.service.UserService;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -23,6 +26,9 @@ public class LoginController {
 
     @Autowired
     UserService userService;
+
+    @Autowired
+    EventProducer eventProducer;
 
     @RequestMapping(path = {"/reg"}, method = {RequestMethod.POST})
     @ResponseBody
@@ -122,6 +128,9 @@ public class LoginController {
                         .setExt("ip",ip));
 
                 */
+                eventProducer.fireEvent(new EventModel(EventType.LOGIN)
+                        .setExt("email","2360564158@qq.com"));
+
 
 
                 /*if (StringUtils.isNotBlank(next)){
