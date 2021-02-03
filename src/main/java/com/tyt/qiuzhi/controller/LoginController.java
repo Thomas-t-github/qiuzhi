@@ -99,7 +99,7 @@ public class LoginController {
     public Map login( @RequestParam("email") String email,
                         @RequestParam("pass") String password,
                         @RequestParam("vercode") String vercode,
-                        //@RequestParam("next") String next,
+                        @RequestParam(value = "next",defaultValue = "") String next,
                         @RequestParam(value="rememberme", defaultValue = "false") boolean rememberme,
                         HttpServletResponse response){
 
@@ -140,6 +140,9 @@ public class LoginController {
 
                 result.put("status",0);
                 result.put("msg","登录成功！");
+                if (!"".equals(next)){
+                    result.put("next",next);
+                }
 
                 return result;
             }else {
@@ -158,6 +161,12 @@ public class LoginController {
     public String logout(@CookieValue("ticket") String ticket){
         userService.logout(ticket);
         return "redirect:/";
+    }
+
+    @RequestMapping(path = {"/relogin"}, method = {RequestMethod.GET})
+    public String relogin(Model model, @RequestParam("next") String next){
+        model.addAttribute("next",next);
+        return "/user/login";
     }
 
 }

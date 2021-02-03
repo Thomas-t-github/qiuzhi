@@ -560,7 +560,12 @@ layui.define(['layer', 'laytpl', 'form', 'element', 'upload', 'util'], function(
       if(res.status == 0){
         layer.msg(res.msg);
 
-        window.location = "/";
+        if (! res.next == ""){
+          window.location = res.next;
+        }else {
+            window.location = "/";
+        }
+
 
         button.attr('alert') ? layer.alert(res.msg, {
           icon: 1,

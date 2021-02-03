@@ -1,5 +1,6 @@
 package com.tyt.qiuzhi.util;
 
+import com.alibaba.fastjson.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -9,6 +10,18 @@ import java.security.MessageDigest;
 public class QiuzhiUtils {
 
     private static final Logger logger = LoggerFactory.getLogger(QiuzhiUtils.class);
+
+
+    public static int ANONYMOUS_USERID = 3;
+    public static int SYSTEM_USERID = 5;
+
+
+    public static String getJSONString(int code, String msg) {
+        JSONObject json = new JSONObject();
+        json.put("status", code);
+        json.put("msg", msg);
+        return json.toJSONString();
+    }
 
     public static String MD5(String key) {
         char hexDigits[] = {
