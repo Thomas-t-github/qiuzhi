@@ -48,6 +48,7 @@
   INDEX `entity_index` (`entity_id` ASC, `entity_type` ASC)
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+
   DROP TABLE IF EXISTS `message`;
   CREATE TABLE `message` (
     `id` INT NOT NULL AUTO_INCREMENT,

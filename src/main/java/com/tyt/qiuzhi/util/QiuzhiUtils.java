@@ -16,9 +16,9 @@ public class QiuzhiUtils {
     public static int SYSTEM_USERID = 5;
 
 
-    public static String getJSONString(int code, String msg) {
+    public static String getJSONString(int status, String msg) {
         JSONObject json = new JSONObject();
-        json.put("status", code);
+        json.put("status", status);
         json.put("msg", msg);
         return json.toJSONString();
     }

@@ -3,10 +3,8 @@ package com.tyt.qiuzhi.controller;
 import com.tyt.qiuzhi.async.EventModel;
 import com.tyt.qiuzhi.async.EventProducer;
 import com.tyt.qiuzhi.async.EventType;
-import com.tyt.qiuzhi.model.HostHolder;
-import com.tyt.qiuzhi.model.Question;
-import com.tyt.qiuzhi.model.User;
-import com.tyt.qiuzhi.model.ViewObject;
+import com.tyt.qiuzhi.model.*;
+import com.tyt.qiuzhi.service.CommentService;
 import com.tyt.qiuzhi.service.QuestionService;
 import com.tyt.qiuzhi.service.UserService;
 import com.tyt.qiuzhi.util.LabelKeyUtil;
@@ -34,6 +32,9 @@ public class QuestionController {
     UserService userService;
 
     @Autowired
+    CommentService commentService;
+
+    @Autowired
     HostHolder hostHolder;
 
     @Autowired
@@ -42,9 +43,20 @@ public class QuestionController {
     @RequestMapping(value = "/detail/{qid}", method = {RequestMethod.GET})
     public String questionDetail(Model model, @PathVariable("qid") int qid){
 
+        ArrayList<ViewObject> vos = new ArrayList<>();
+
         Question question = questionService.selectById(qid);
         User owner = userService.selectById(question.getUserId());
+        List<Comment> comments = commentService.getCommentsByEntity(qid, EntityType.ENTITY_QUESTION);
+        for (Comment comment : comments) {
+            ViewObject vo = new ViewObject();
+            User user = userService.selectById(comment.getUserId());
+            vo.set("comment",comment);
+            vo.set("commentOwner",user);
+            vos.add(vo);
+        }
         model.addAttribute("question",question);
+        model.addAttribute("vos",vos);
         model.addAttribute("owner",owner);
         /*
         List<Comment> comments = commentService.getCommentsByEntity(question.getId(), EntityType.ENTITY_QUESTION);
