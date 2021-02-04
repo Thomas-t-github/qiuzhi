@@ -543,7 +543,7 @@ layui.define(['layer', 'laytpl', 'form', 'element', 'upload', 'util'], function 
         }
         text = text.replace(/^@|（[\s\S]+?）/g, '');
         othis.attr({
-            href: '/jump?username=' + text
+            href: '/user/homepage?username=' + text
             , target: '_blank'
         });
     });

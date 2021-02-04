@@ -1,9 +1,6 @@
 package com.tyt.qiuzhi.controller;
 
-import com.tyt.qiuzhi.async.EventModel;
 import com.tyt.qiuzhi.async.EventProducer;
-import com.tyt.qiuzhi.async.EventType;
-import com.tyt.qiuzhi.model.Comment;
 import com.tyt.qiuzhi.model.EntityType;
 import com.tyt.qiuzhi.model.HostHolder;
 import com.tyt.qiuzhi.service.CommentService;
@@ -11,7 +8,6 @@ import com.tyt.qiuzhi.service.LikeService;
 import com.tyt.qiuzhi.util.JedisAdapter;
 import com.tyt.qiuzhi.util.QiuzhiUtils;
 import com.tyt.qiuzhi.util.RedisKeyUtil;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,8 +15,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.HashMap;
-import java.util.Map;
 
 @Controller
 @RequestMapping("/api")

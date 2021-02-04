@@ -24,6 +24,10 @@ public class CommentService {
         return commentDAO.selectByEntity(entityId,entityType);
     }
 
+    public List<Comment> selectByUserId(int userId){
+        return commentDAO.selectByUserId(userId);
+    }
+
     public int getCommentCount(int entityId,int entityType){
         return commentDAO.getCommentCount(entityId,entityType);
     }
