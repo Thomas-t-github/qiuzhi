@@ -68,6 +68,7 @@ public class CommentController {
             comment.setEntityId(questionId);
             comment.setEntityType(EntityType.ENTITY_QUESTION);
             comment.setStatus(0);
+            comment.setLikeCount(0);
             commentService.addComment(comment);
 
             int commentCount = commentService.getCommentCount(comment.getEntityId(), comment.getEntityType());

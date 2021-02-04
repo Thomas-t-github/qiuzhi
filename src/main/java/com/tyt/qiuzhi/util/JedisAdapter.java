@@ -49,6 +49,21 @@ public class JedisAdapter implements InitializingBean {
         return 0;
     }
 
+    public String spop(String key) {
+        Jedis jedis = null;
+        try {
+            jedis = pool.getResource();
+            return jedis.spop(key);
+        } catch (Exception e) {
+            logger.error("Jedis发生异常" + e.getMessage());
+        } finally {
+            if (jedis != null) {
+                jedis.close();
+            }
+        }
+        return null;
+    }
+
     public long srem(String key, String value) {
         Jedis jedis = null;
         try {

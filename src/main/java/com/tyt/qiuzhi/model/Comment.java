@@ -19,6 +19,7 @@ public class Comment {
     private int entityId;       //实体id
     private int entityType;     //实体类型
     private Date createdDate;       //创建时间
+    private int likeCount;         //喜欢数
     private int status;         //评论状态
 
 }

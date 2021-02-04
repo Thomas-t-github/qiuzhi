@@ -106,7 +106,8 @@
                         <a name="item-1111111111"></a>
                         <div class="detail-about detail-about-reply">
                             <a class="fly-avatar" href="">
-                                <img th:src="${vo.get('commentOwner').headUrl}" src="https://tva1.sinaimg.cn/crop.0.0.118.118.180/5db11ff4gw1e77d3nqrv8j203b03cweg.jpg"
+                                <img th:src="${vo.get('commentOwner').headUrl}"
+                                     src="https://tva1.sinaimg.cn/crop.0.0.118.118.180/5db11ff4gw1e77d3nqrv8j203b03cweg.jpg"
                                      alt=" ">
                             </a>
                             <div class="fly-detail-user">
@@ -128,16 +129,20 @@
                                 <span th:text="${#dates.format(vo.get('comment').createdDate,'yyyy-MM-dd HH-mm-ss')}">2017-11-30</span>
                             </div>
 
-                            <span th:if="${vo.get('comment').status == 1}"><i class="iconfont icon-caina"  title="最佳答案"></i></span>
+                            <span th:if="${vo.get('comment').status == 1}"><i class="iconfont icon-caina"
+                                                                              title="最佳答案"></i></span>
                         </div>
                         <div th:text="${vo.get('comment').content}" class="detail-body jieda-body photos">
                             <p>香菇那个蓝瘦，这是一条被采纳的回帖</p>
                         </div>
                         <div class="jieda-reply">
-                            <!--<span class="jieda-zan zanok" type="zan">-->
-                            <span class="jieda-zan" type="zan">
-                            <i class="iconfont icon-zan"></i>
-                            <em>66</em>
+                            <span class="jieda-zan zanok" type="zan" th:if="${vo.get('likeStatus')} == 1">
+                                <i class="iconfont icon-zan"></i>
+                                <em th:text="${vo.get('comment').likeCount}">66</em>
+                            </span>
+                            <span class="jieda-zan" type="zan" th:if="${vo.get('likeStatus')} != 1">
+                                <i class="iconfont icon-zan"></i>
+                                <em th:text="${vo.get('comment').likeCount}">66</em>
                             </span>
                             <span type="reply">
                             <i class="iconfont icon-svgmoban53"></i>
@@ -228,7 +233,7 @@
 <script src="/static/res/layui/layui.js"></script>
 <script>
 
-    layui.use(['element','form'], function () {
+    layui.use(['element', 'form'], function () {
         var element = layui.element;
         var form = layui.form;
 

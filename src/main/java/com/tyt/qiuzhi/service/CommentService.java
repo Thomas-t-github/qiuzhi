@@ -2,6 +2,7 @@ package com.tyt.qiuzhi.service;
 
 import com.tyt.qiuzhi.dao.CommentDAO;
 import com.tyt.qiuzhi.model.Comment;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.HtmlUtils;
@@ -43,6 +44,10 @@ public class CommentService {
 
     public int getUserCommentCount(int userId){
         return commentDAO.getUserCommentCount(userId);
+    }
+
+    public int updateLikeCount(int id, int likeCount){
+        return commentDAO.updateLikeCount(id,likeCount);
     }
 
 

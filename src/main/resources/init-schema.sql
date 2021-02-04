@@ -43,6 +43,7 @@
   `entity_id` INT NOT NULL,
   `entity_type` INT NOT NULL,
   `created_date` DATETIME NOT NULL,
+  `like_count` INT NOT NULL,
   `status` INT NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`),
   INDEX `entity_index` (`entity_id` ASC, `entity_type` ASC)

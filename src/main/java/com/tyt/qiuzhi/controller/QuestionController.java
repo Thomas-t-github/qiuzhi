@@ -5,8 +5,10 @@ import com.tyt.qiuzhi.async.EventProducer;
 import com.tyt.qiuzhi.async.EventType;
 import com.tyt.qiuzhi.model.*;
 import com.tyt.qiuzhi.service.CommentService;
+import com.tyt.qiuzhi.service.LikeService;
 import com.tyt.qiuzhi.service.QuestionService;
 import com.tyt.qiuzhi.service.UserService;
+import com.tyt.qiuzhi.util.JedisAdapter;
 import com.tyt.qiuzhi.util.LabelKeyUtil;
 import com.tyt.qiuzhi.util.QiuzhiUtils;
 import org.slf4j.Logger;
@@ -38,6 +40,9 @@ public class QuestionController {
     HostHolder hostHolder;
 
     @Autowired
+    LikeService likeService;
+
+    @Autowired
     EventProducer eventProducer;
 
     @RequestMapping(value = "/detail/{qid}", method = {RequestMethod.GET})
@@ -45,13 +50,20 @@ public class QuestionController {
 
         ArrayList<ViewObject> vos = new ArrayList<>();
 
+        int userId = 0;
+        if (hostHolder.getUser() != null){
+            userId = hostHolder.getUser().getId();
+        }
+
         Question question = questionService.selectById(qid);
         User owner = userService.selectById(question.getUserId());
         List<Comment> comments = commentService.getCommentsByEntity(qid, EntityType.ENTITY_QUESTION);
         for (Comment comment : comments) {
             ViewObject vo = new ViewObject();
             User user = userService.selectById(comment.getUserId());
+            int likeStatus = likeService.getLikeStatus(userId, EntityType.ENTITY_COMMENT, comment.getId());
             vo.set("comment",comment);
+            vo.set("likeStatus",likeStatus);
             vo.set("commentOwner",user);
             vos.add(vo);
         }
