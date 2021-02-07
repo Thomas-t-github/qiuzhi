@@ -13,7 +13,7 @@ public class QiuzhiUtils {
 
 
     public static int ANONYMOUS_USERID = 3;
-    public static int SYSTEM_USERID = 5;
+    public static int SYSTEM_USERID = 1;
 
 
     public static String getJSONString(int status, String msg) {

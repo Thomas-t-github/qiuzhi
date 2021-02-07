@@ -11,7 +11,8 @@
          src="https://tva1.sinaimg.cn/crop.0.0.118.118.180/5db11ff4gw1e77d3nqrv8j203b03cweg.jpg" alt="贤心">
     <i class="iconfont icon-renzheng" title="Fly社区认证"></i>
     <h1>
-        <span th:text="${owner.nickName}" style="font-size: 28px;color: black">贤心</span>
+        <span id="username" th:text="${owner.nickName}" style="font-size: 28px;color: black">贤心</span>
+        <span id="uid" th:text="${owner.id}" class="layui-hide"></span>
         <i class="iconfont icon-nan"></i>
         <!-- <i class="iconfont icon-nv"></i>  -->
         <i class="layui-badge fly-badge-vip">VIP3</i>
@@ -22,7 +23,7 @@
         -->
     </h1>
 
-    <p style="padding: 10px 0; color: #5FB878;">认证信息：layui 作者</p>
+    <p style="padding: 10px 0; color: #5FB878;">认证信息：大V 作者</p>
 
     <p class="fly-home-info">
         <i class="iconfont icon-kiss" title="飞吻"></i><span style="color: #FF7200;">66666 飞吻</span>
@@ -96,7 +97,7 @@
                 <ul class="home-jieda">
                     <li th:each="vo : ${vos}">
                         <p>
-                            <span th:text="${#dates.format(vo.get('comment').createdDate,'yyyy-MM-dd HH-mm-ss')}">1分钟前</span>
+                            <span th:text="${#dates.format(vo.get('comment').createdDate,'yyyy-MM-dd HH:mm:ss')}">1分钟前</span>
                             在<a href="" th:href="'/jie/detail/'+${vo.get('question').id}" target="_blank"
                                 th:text="${#strings.substring(vo.get('question').title,0,vo.get('question').title.length() > 20 ? 20 : vo.get('question').title.length())}">tips能同时渲染多个吗?</a>中回答：
                         </p>
@@ -138,18 +139,26 @@ full: true
 <script src="/static/res/layui/layui.js"></script>
 <script>
     layui.use('layer', function () { //独立版的layer无需执行这一句
-        var $ = layui.jquery, layer = layui.layer; //独立版的layer无需执行这一句
+        var $ = layui.jquery,form = layui.form, layer = layui.layer; //独立版的layer无需执行这一句
 
 
         $('#layerPop .layui-btn').on('click', function(){
             layer.open({
                 type: 2,
-                area: ['700px', '450px'],
+                area: ['700px', '400px'],
                 fixed: false, //不固定
                 maxmin: true,
-                content: '/static/iframe/sendMessage.html'
+                content: '/static/iframe/sendMessage.html',
+                success: function(layero, index){
+                    var body = layer.getChildFrame('body', index);
+                    var iframeWin = window[layero.find('iframe')[0]['name']]; //得到iframe页的窗口对象，执行iframe页的方法：iframeWin.method();
+                    //console.log(body.html()); //得到iframe页的body内容
+                    body.find('input').val($("#username").html());
+                    body.find('#uid').val($("#uid").html());
+                }
             });
         });
+
 
     });
 

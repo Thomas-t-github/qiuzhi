@@ -70,46 +70,7 @@ public class QuestionController {
         model.addAttribute("question",question);
         model.addAttribute("vos",vos);
         model.addAttribute("owner",owner);
-        /*
-        List<Comment> comments = commentService.getCommentsByEntity(question.getId(), EntityType.ENTITY_QUESTION);
-        ArrayList<ViewObject> vos = new ArrayList<>();
-        for (Comment comment : comments) {
-            ViewObject vo = new ViewObject();
-            vo.set("comment",comment);
-            vo.set("user",userService.selectById(comment.getUserId()));
 
-            if (hostHolder.getUser() == null){
-                vo.set("liked",0);
-            }else {
-                vo.set("liked",likeService.getLikeStatus(hostHolder.getUser().getId(),EntityType.ENTITY_COMMENT,comment.getId()));
-            }
-            vo.set("likeCount",likeService.getLikeCount(EntityType.ENTITY_COMMENT,comment.getId()));
-
-            vos.add(vo);
-        }
-        model.addAttribute("comments",vos);
-
-        ArrayList<ViewObject> followUsers = new ArrayList<>();
-
-        List<Integer> followerUids = followService.getFollowers(EntityType.ENTITY_QUESTION, qid, 20);
-        for (Integer followerUid : followerUids) {
-            ViewObject vo = new ViewObject();
-            User user = userService.selectById(followerUid);
-            if (user == null){
-                continue;
-            }
-            vo.set("name",user.getName());
-            vo.set("headUrl",user.getHeadUrl());
-            vo.set("id",user.getId());
-            followUsers.add(vo);
-        }
-        model.addAttribute("followUsers",followUsers);
-
-        if (hostHolder.getUser() != null){
-            model.addAttribute("followed",followService.isFollower(hostHolder.getUser().getId(),EntityType.ENTITY_QUESTION,qid));
-        }else {
-            model.addAttribute("followed",false);
-        }*/
 
         return "jie/detail";
     }

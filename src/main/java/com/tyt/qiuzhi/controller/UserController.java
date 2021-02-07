@@ -67,7 +67,7 @@ public class UserController {
         return "user/set";
     }
 
-    @RequestMapping(value = "/toMessage", method = RequestMethod.GET)
+    @RequestMapping(value = "/toMessage", method = {RequestMethod.GET,RequestMethod.POST})
     public String toMessage(){
         return "user/message";
     }

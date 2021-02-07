@@ -1,4 +1,3 @@
-
 <!--导航栏开始-->
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
@@ -8,95 +7,184 @@
 <!--导航栏结束-->
 
 <div class="layui-container fly-marginTop fly-user-main">
-  <ul class="layui-nav layui-nav-tree layui-inline" lay-filter="user">
-    <li class="layui-nav-item">
-      <a href="/user/homepage/" th:href="'/user/homepage/'+${user.id}">
-        <i class="layui-icon">&#xe609;</i>
-        我的主页
-      </a>
-    </li>
-    <li class="layui-nav-item">
-      <a href="/user/toUserCenter">
-        <i class="layui-icon">&#xe612;</i>
-        用户中心
-      </a>
-    </li>
-    <li class="layui-nav-item">
-      <a href="/user/toSet">
-        <i class="layui-icon">&#xe620;</i>
-        基本设置
-      </a>
-    </li>
-    <li class="layui-nav-item layui-this">
-      <a href="/user/toMessage">
-        <i class="layui-icon">&#xe611;</i>
-        我的消息
-      </a>
-    </li>
-  </ul>
+    <ul id="hoverUl" class="layui-nav layui-nav-tree layui-inline" lay-filter="user" style="background-color: #FFF">
+        <!--<li class="layui-nav-item">
+          <a href="/user/homepage/" th:href="'/user/homepage/'+${user.id}">
+            <i class="layui-icon">&#xe609;</i>
+            我的主页
+          </a>
+        </li>
+        <li class="layui-nav-item">
+          <a href="/user/toUserCenter">
+            <i class="layui-icon">&#xe612;</i>
+            用户中心
+          </a>
+        </li>
+        <li class="layui-nav-item">
+          <a href="/user/toSet">
+            <i class="layui-icon">&#xe620;</i>
+            基本设置
+          </a>
+        </li>-->
+        <li class="layui-nav-item layui-this">
+          <a href="/msg/list">
+            <!--<i class="layui-icon">&#xe611;</i>-->
+            <span style="color: black;font-size: 16px">系统消息</span>
+          </a>
+        </li>
 
-  <div class="site-tree-mobile layui-hide">
-    <i class="layui-icon">&#xe602;</i>
-  </div>
-  <div class="site-mobile-shade"></div>
-  
-  <div class="site-tree-mobile layui-hide">
-    <i class="layui-icon">&#xe602;</i>
-  </div>
-  <div class="site-mobile-shade"></div>
-  
-  
-  <div class="fly-panel fly-panel-user" pad20>
-	  <div class="layui-tab layui-tab-brief" lay-filter="user" id="LAY_msg" style="margin-top: 15px;">
-	    <button class="layui-btn layui-btn-danger" id="LAY_delallmsg">清空全部消息</button>
-	    <div  id="LAY_minemsg" style="margin-top: 10px;">
-        <!--<div class="fly-none">您暂时没有最新消息</div>-->
-        <ul class="mine-msg">
-          <li data-id="123">
-            <blockquote class="layui-elem-quote">
-              <a href="/jump?username=Absolutely" target="_blank"><cite>Absolutely</cite></a>回答了您的求解<a target="_blank" href="/jie/8153.html/page/0/#item-1489505778669"><cite>layui后台框架</cite></a>
-            </blockquote>
-            <p><span>1小时前</span><a href="javascript:;" class="layui-btn layui-btn-small layui-btn-danger fly-delete">删除</a></p>
-          </li>
-          <li data-id="123">
-            <blockquote class="layui-elem-quote">
-              系统消息：欢迎使用 layui
-            </blockquote>
-            <p><span>1小时前</span><a href="javascript:;" class="layui-btn layui-btn-small layui-btn-danger fly-delete">删除</a></p>
-          </li>
-        </ul>
-      </div>
-	  </div>
-	</div>
+
+        <li th:each="vo : ${conversations}" th:if="${vo.get('listUser').id} != 1" th:class="${vo.get('listUser').id} != ${detailUser.id} ? 'layui-nav-item' : 'layui-nav-item layui-this'" class="layui-nav-item layui-this">
+            <a href="/msg/list" th:href="'/msg/detail/'+${vo.get('conversationId')}">
+                <img style="height:35px;width:35px;border-radius:50%;line-height:50px!important;"
+                     th:src="${vo.get('listUser').headUrl}"
+                     src="https://tva1.sinaimg.cn/crop.0.0.118.118.180/5db11ff4gw1e77d3nqrv8j203b03cweg.jpg">
+                &nbsp;&nbsp;&nbsp;
+                <span th:id="${vo.get('listUser').id} == ${detailUser.id} ? username : null" th:text="${vo.get('listUser').nickName}" style="color: black">我的消息</span>
+                <span class="layui-hide" th:id="${vo.get('listUser').id} == ${detailUser.id} ? uid : null" th:text="${detailUser.id}">123</span>
+            </a>
+        </li>
+        <!--<li th:each="vo : ${conversations}" class="layui-nav-item" th:if="${vo.get('listUser').id} != ${detailUser.id}">
+            <a href="/msg/list" th:href="'/msg/detail/'+${vo.get('conversationId')}">
+                <img style="height:35px;width:35px;border-radius:50%;line-height:50px!important;"
+                     th:src="${vo.get('listUser').headUrl}"
+                     src="https://tva1.sinaimg.cn/crop.0.0.118.118.180/5db11ff4gw1e77d3nqrv8j203b03cweg.jpg">
+                &nbsp;&nbsp;&nbsp;
+                <span th:text="${vo.get('listUser').nickName}" style="color: black">我的消息</span>
+            </a>
+        </li>-->
+    </ul>
+
+    <div class="site-tree-mobile layui-hide">
+        <i class="layui-icon">&#xe602;</i>
+    </div>
+    <div class="site-mobile-shade"></div>
+
+    <div class="site-tree-mobile layui-hide">
+        <i class="layui-icon">&#xe602;</i>
+    </div>
+    <div class="site-mobile-shade"></div>
+
+
+    <div class="fly-panel fly-panel-user" pad20>
+        <div data-id="12" th:attr="data-id=${conversationId}" class="layui-tab layui-tab-brief" lay-filter="user" id="LAY_msg" style="margin-top: 15px;">
+            <button class="layui-btn layui-btn-danger" id="LAY_delallmsg">清空全部消息</button>
+            <button class="layui-btn layui-btn-normal" th:if="${not #lists.isEmpty(detailConversations)}" lay-filter="send_msg" id="send_msg">发送消息</button>
+            <div id="LAY_minemsg" style="margin-top: 10px;">
+                <!--<div class="fly-none">您暂时没有最新消息</div>-->
+                <ul class="mine-msg">
+                    <li data-id="123" th:attr="data-id=${systemMessage.id}" th:each="systemMessage : ${systemMessages}">
+                        <blockquote class="layui-elem-quote">
+                            系统消息：<span th:text="${systemMessage.content}">欢迎使用 layui</span>
+                        </blockquote>
+                        <p><span th:text="${#dates.format(systemMessage.createdDate,'yyyy-MM-dd HH:mm:ss')}">1小时前</span><a href="javascript:;"
+                                               class="layui-btn layui-btn-small layui-btn-danger fly-delete">删除</a></p>
+                    </li>
+                    <li data-id="123" th:attr="data-id=${detailConversation.get('message').id}" th:each="detailConversation : ${detailConversations}">
+                        <blockquote class="layui-elem-quote">
+                            <img style="height:35px;width:35px;border-radius:50%;line-height:50px!important;"
+                                 th:src="${detailConversation.get('detailUser').headUrl}"
+                                 src="https://tva1.sinaimg.cn/crop.0.0.118.118.180/5db11ff4gw1e77d3nqrv8j203b03cweg.jpg">
+                            <a th:href="'/user/homepage/'+${detailConversation.get('detailUser').id}" href="/jump?username=Absolutely" target="_blank"><cite th:text="${detailConversation.get('detailUser').nickName}">Absolutely</cite></a><span th:text="${detailConversation.get('detailUser').id == user.id ? '你给'+detailUser.nickName+'发了私信' : '给你发了私信'}">给你发了私信</span>
+                            <a target="_blank" href="javascript:void(0);"><cite th:text="${detailConversation.get('message').content}">layui后台框架</cite></a>
+                        </blockquote>
+                        <p><span th:text="${#dates.format(detailConversation.get('message').createdDate,'yyyy-MM-dd HH:mm:ss')}">1小时前</span><a href="javascript:;" class="layui-btn layui-btn-small layui-btn-danger fly-delete">删除</a></p>
+                    </li>
+                    <!--<li data-id="123">
+                        <blockquote class="layui-elem-quote">
+                            系统消息：欢迎使用 layui
+                        </blockquote>
+                        <p><span>1小时前</span><a href="javascript:;"
+                                               class="layui-btn layui-btn-small layui-btn-danger fly-delete">删除</a></p>
+                    </li>-->
+                </ul>
+            </div>
+        </div>
+    </div>
 
 </div>
 
 
 <div class="fly-footer">
-  <p><a href="http://fly.layui.com/" target="_blank">Fly社区</a> 2017 &copy; <a href="http://www.layui.com/" target="_blank">layui.com 出品</a></p>
-  <p>
-    <a href="http://fly.layui.com/jie/3147/" target="_blank">付费计划</a>
-    <a href="http://www.layui.com/template/fly/" target="_blank">获取Fly社区模版</a>
-    <a href="http://fly.layui.com/jie/2461/" target="_blank">微信公众号</a>
-  </p>
+    <p><a href="http://fly.layui.com/" target="_blank">Fly社区</a> 2017 &copy; <a href="http://www.layui.com/"
+                                                                                target="_blank">layui.com 出品</a></p>
+    <p>
+        <a href="http://fly.layui.com/jie/3147/" target="_blank">付费计划</a>
+        <a href="http://www.layui.com/template/fly/" target="_blank">获取Fly社区模版</a>
+        <a href="http://fly.layui.com/jie/2461/" target="_blank">微信公众号</a>
+    </p>
 </div>
+
+<style type="text/css">
+    .layui-this > a {
+        background-color: #f1f1f1 !important;
+    }
+    #hoverUl li a:hover{
+        background-color: #f1f1f1 !important;
+    }
+</style>
 
 <script src="/static/res/layui/layui.js"></script>
 <script>
-layui.cache.page = 'user';
-layui.cache.user = {
-  username: '游客'
-  ,uid: -1
-  ,avatar: '/static/res/images/avatar/00.jpg'
-  ,experience: 83
-  ,sex: '男'
-};
-layui.config({
-  version: "3.0.0"
-  ,base: '/static/res/mods/'
-}).extend({
-  fly: 'index'
-}).use('fly');
+
+
+    layui.use(['layer', 'form', 'jquery'], function () { //独立版的layer无需执行这一句
+        var $ = layui.jquery,form = layui.form, layer = layui.layer; //独立版的layer无需执行这一句
+
+
+        /*$('#LAY_send_msg .layui-btn').on('click', function(){
+            layer.open({
+                type: 2,
+                area: ['700px', '400px'],
+                fixed: false, //不固定
+                maxmin: true,
+                content: '/static/iframe/sendMessage.html',
+                success: function(layero, index){
+                    var body = layer.getChildFrame('body', index);
+                    var iframeWin = window[layero.find('iframe')[0]['name']]; //得到iframe页的窗口对象，执行iframe页的方法：iframeWin.method();
+                    //console.log(body.html()); //得到iframe页的body内容
+                    body.find('input').val($("#username").html());
+                    body.find('#uid').val($("#uid").html());
+                }
+            });
+        });*/
+
+        $('#send_msg').on('click', function(){
+            layer.open({
+                type: 2,
+                area: ['700px', '400px'],
+                fixed: false, //不固定
+                maxmin: true,
+                content: '/static/iframe/sendMessage.html',
+                success: function(layero, index){
+                    var body = layer.getChildFrame('body', index);
+                    var iframeWin = window[layero.find('iframe')[0]['name']]; //得到iframe页的窗口对象，执行iframe页的方法：iframeWin.method();
+                    //console.log(body.html()); //得到iframe页的body内容
+                    body.find('input').val($("#username").html());
+                    body.find('#uid').val($("#uid").html());
+                }
+            });
+        });
+
+
+
+    });
+
+
+    layui.cache.page = 'user';
+    layui.cache.user = {
+        username: '游客'
+        , uid: -1
+        , avatar: '/static/res/images/avatar/00.jpg'
+        , experience: 83
+        , sex: '男'
+    };
+    layui.config({
+        version: "3.0.0"
+        , base: '/static/res/mods/'
+    }).extend({
+        fly: 'index'
+    }).use('fly');
 </script>
 
 </body>

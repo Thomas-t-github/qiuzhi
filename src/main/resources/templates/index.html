@@ -52,7 +52,7 @@
                     <!--每一条资讯-->
 
                     <li>
-                        <a href="user/home.html" class="fly-avatar">
+                        <a href="user/home.html" th:href="'/user/homepage/'+${vo.get('user').id}" class="fly-avatar">
                             <img th:src="${vo.get('user').headUrl}"
                                  src="https://tva1.sinaimg.cn/crop.0.0.118.118.180/5db11ff4gw1e77d3nqrv8j203b03cweg.jpg"
                                  alt="贤心">
@@ -70,7 +70,7 @@
                                 <i class="iconfont icon-renzheng" title="认证信息：XXX"></i>
                                 <i class="layui-badge fly-badge-vip">VIP3</i>
                             </a>
-                            <span th:text="${#dates.format(vo.get('user').createdDate,'yyyy-MM-dd HH-mm-ss')}">刚刚</span>
+                            <span th:text="${#dates.format(vo.get('user').createdDate,'yyyy-MM-dd HH:mm:ss')}">刚刚</span>
 
                             <span class="fly-list-kiss layui-hide-xs" title="悬赏飞吻"
                                   th:text="${vo.get('question').reward}"><i class="iconfont icon-kiss"></i> 60</span>
