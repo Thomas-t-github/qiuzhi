@@ -4,10 +4,7 @@ import com.tyt.qiuzhi.async.EventModel;
 import com.tyt.qiuzhi.async.EventProducer;
 import com.tyt.qiuzhi.async.EventType;
 import com.tyt.qiuzhi.model.*;
-import com.tyt.qiuzhi.service.CommentService;
-import com.tyt.qiuzhi.service.LikeService;
-import com.tyt.qiuzhi.service.QuestionService;
-import com.tyt.qiuzhi.service.UserService;
+import com.tyt.qiuzhi.service.*;
 import com.tyt.qiuzhi.util.JedisAdapter;
 import com.tyt.qiuzhi.util.LabelKeyUtil;
 import com.tyt.qiuzhi.util.QiuzhiUtils;
@@ -37,6 +34,9 @@ public class QuestionController {
     CommentService commentService;
 
     @Autowired
+    CollectService collectService;
+
+    @Autowired
     HostHolder hostHolder;
 
     @Autowired
@@ -51,8 +51,10 @@ public class QuestionController {
         ArrayList<ViewObject> vos = new ArrayList<>();
 
         int userId = 0;
+        List<Collect> isCollect = null;
         if (hostHolder.getUser() != null){
             userId = hostHolder.getUser().getId();
+            isCollect = collectService.getUserCollectStatus(hostHolder.getUser().getId(), qid, EntityType.ENTITY_QUESTION);
         }
 
         Question question = questionService.selectById(qid);
@@ -67,6 +69,8 @@ public class QuestionController {
             vo.set("commentOwner",user);
             vos.add(vo);
         }
+        model.addAttribute("isCollect",isCollect.size() > 0 ? isCollect.get(0) : null);
+
         model.addAttribute("question",question);
         model.addAttribute("vos",vos);
         model.addAttribute("owner",owner);

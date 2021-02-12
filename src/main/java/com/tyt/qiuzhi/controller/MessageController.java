@@ -62,7 +62,7 @@ public class MessageController {
         }
         model.addAttribute("status",0);
         model.addAttribute("msg","发送私信成功");
-        return "redirect:/user/toLogin";
+        return "forward:/user/toLogin";
     }
 
     @RequestMapping(path = {"/list"}, method = {RequestMethod.GET})
@@ -70,7 +70,7 @@ public class MessageController {
 
         try {
             if (hostHolder.getUser() == null){
-                return "redirect:/toLogin";
+                return "redirect:/user/toLogin";
             }
 
             List<Message> conversationList = messageService.getConversationList(hostHolder.getUser().getId(), 0, 10);
@@ -103,7 +103,7 @@ public class MessageController {
 
         try {
             if (hostHolder.getUser() == null){
-                return "redirect:/toLogin";
+                return "redirect:/user/toLogin";
             }
 
             List<Message> conversationList = messageService.getConversationList(hostHolder.getUser().getId(), 0, 10);

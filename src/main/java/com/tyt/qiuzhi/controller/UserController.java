@@ -1,6 +1,7 @@
 package com.tyt.qiuzhi.controller;
 
 import com.tyt.qiuzhi.model.*;
+import com.tyt.qiuzhi.service.CollectService;
 import com.tyt.qiuzhi.service.CommentService;
 import com.tyt.qiuzhi.service.QuestionService;
 import com.tyt.qiuzhi.service.UserService;
@@ -30,6 +31,9 @@ public class UserController {
 
     @Autowired
     HostHolder hostHolder;
+
+    @Autowired
+    CollectService collectService;
 
     @RequestMapping(value = "/homepage/{uid}", method = RequestMethod.GET)
     public String homepage(Model model, @PathVariable("uid") int uid){
@@ -79,9 +83,24 @@ public class UserController {
             return "redirect:/user/toLogin";
         }
 
+        ArrayList<ViewObject> vos = new ArrayList<>();
+
+        List<Collect> collects = collectService.selectByUserId(hostHolder.getUser().getId());
+
+
+        for (Collect collect : collects) {
+            ViewObject vo = new ViewObject();
+            Question question = questionService.selectById(collect.getEntityId());
+            vo.set("collect",collect);
+            vo.set("question",question);
+            vos.add(vo);
+        }
+
         List<Question> questions = questionService.selectLatestQuestions(hostHolder.getUser().getId(), 0, 10);
 
         model.addAttribute("questions",questions);
+
+        model.addAttribute("vos",vos);
 
         return "user/index";
     }

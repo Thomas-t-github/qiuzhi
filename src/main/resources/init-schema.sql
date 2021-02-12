@@ -65,6 +65,18 @@
   ENGINE = InnoDB
   DEFAULT CHARACTER SET = utf8;
 
+  DROP TABLE IF EXISTS `collect`;
+  CREATE TABLE `collect` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `user_id` INT NOT NULL,
+  `entity_id` INT NOT NULL,
+  `entity_type` INT NOT NULL,
+  `created_date` DATETIME NOT NULL,
+  `status` INT NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id`),
+  INDEX `entity_index` (`entity_id` ASC, `entity_type` ASC)
+  ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
   DROP TABLE IF EXISTS `feed`;
   CREATE TABLE `feed` (
     `id` INT NOT NULL AUTO_INCREMENT,

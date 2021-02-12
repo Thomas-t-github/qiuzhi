@@ -23,7 +23,7 @@
                 <li class="layui-hide-xs layui-hide-sm layui-show-md-inline-block"><a
                         href="../../templates/user/index.html">我发表的贴</a></li>
                 <li class="layui-hide-xs layui-hide-sm layui-show-md-inline-block"><a
-                        href="../../templates/user/index.html#collection">我收藏的贴</a></li>
+                        href="/collect/find#collection">我收藏的贴</a></li>
             </ul>
 
             <div class="fly-column-right layui-hide-xs">
@@ -92,7 +92,13 @@
                 <div class="detail-body photos" th:text="${question.description}">
                     无数据
                 </div>
+                <div style="text-align: center;margin-top: 10px">
+                    <span th:attr="data-id=${question.id},data-type=${isCollect} ? 'remove' : 'add'" class="layui-btn layui-btn-primary layui-btn-xs jie-admin" data-type="add" data-id="688" type="collect" style="font-size: 15px; border: 0px; color: #FFB800;cursor: pointer"><i  class="layui-icon" th:text="${isCollect} ? '&#xe658;' : '&#xe600;'">&#xe600;</i><span th:text="${isCollect} ? '取消收藏' : '收藏'">收藏</span></span>
+                    <span class="copyshare"><i class="layui-icon" style="font-size: 15px; color: #1E9FFF;cursor: pointer">&#xe641; 分享</i></span>
+                </div>
             </div>
+
+
 
             <div class="fly-panel detail-box" id="flyReply">
                 <fieldset class="layui-elem-field layui-field-title" style="text-align: center;">

@@ -105,13 +105,17 @@ layui.define('fly', function(exports){
     //收藏
     ,collect: function(div){
       var othis = $(this), type = othis.data('type');
-      fly.json('/collection/'+ type +'/', {
-        cid: div.data('id')
+      fly.json('/collect/'+ type +'/', {
+        qid: othis.data('id')
       }, function(res){
         if(type === 'add'){
-          othis.data('type', 'remove').html('取消收藏').addClass('layui-btn-danger');
+          layer.msg(res.msg);
+          /*othis.data('type', 'remove').html('<i  class="layui-icon" >&#xe658;</i>取消收藏').addClass('layui-btn-danger');*/
+          othis.data('type', 'remove').html('<i  class="layui-icon" >&#xe658;</i>取消收藏');
         } else if(type === 'remove'){
-          othis.data('type', 'add').html('收藏').removeClass('layui-btn-danger');
+          layer.msg(res.msg);
+          /*othis.data('type', 'add').html('<i  class="layui-icon" >&#xe600;</i>收藏').removeClass('layui-btn-danger');*/
+          othis.data('type', 'add').html('<i  class="layui-icon" >&#xe600;</i>收藏');
         }
       });
     }

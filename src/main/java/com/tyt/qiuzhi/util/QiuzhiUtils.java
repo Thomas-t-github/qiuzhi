@@ -22,6 +22,11 @@ public class QiuzhiUtils {
         json.put("msg", msg);
         return json.toJSONString();
     }
+    public static String getJSONString(int status) {
+        JSONObject json = new JSONObject();
+        json.put("status", status);
+        return json.toJSONString();
+    }
 
     public static String MD5(String key) {
         char hexDigits[] = {
