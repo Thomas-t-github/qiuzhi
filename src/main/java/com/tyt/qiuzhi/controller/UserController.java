@@ -1,20 +1,26 @@
 package com.tyt.qiuzhi.controller;
 
+import cn.hutool.extra.mail.MailUtil;
 import com.tyt.qiuzhi.model.*;
 import com.tyt.qiuzhi.service.CollectService;
 import com.tyt.qiuzhi.service.CommentService;
 import com.tyt.qiuzhi.service.QuestionService;
 import com.tyt.qiuzhi.service.UserService;
+import com.tyt.qiuzhi.util.JedisAdapter;
+import com.tyt.qiuzhi.util.QiuzhiUtils;
+import com.tyt.qiuzhi.util.RedisKeyUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.Context;
+import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Random;
 
 @Controller
 @RequestMapping("/user")
@@ -34,6 +40,12 @@ public class UserController {
 
     @Autowired
     CollectService collectService;
+
+    @Autowired
+    JedisAdapter jedisAdapter;
+
+    @Autowired
+    TemplateEngine templateEngine;
 
     @RequestMapping(value = "/homepage/{uid}", method = RequestMethod.GET)
     public String homepage(Model model, @PathVariable("uid") int uid){
@@ -66,15 +78,51 @@ public class UserController {
         return "user/home";
     }
 
+
     @RequestMapping(value = "/toSet", method = RequestMethod.GET)
     public String toSet(){
         return "user/set";
     }
 
+
+    @RequestMapping(value = "/sendEmail", method = RequestMethod.POST)
+    @ResponseBody
+    public String sendEmail(@RequestParam("email") String email){
+
+        HashMap<String, Object> map = new HashMap<>();
+
+        String vercode = String.format("%04d", new Random().nextInt(9999));
+
+        map.put("vercode",vercode);
+        User user = userService.selectByEmail(email);
+        if (user != null){
+            map.put("username",user.getNickName());
+        }else {
+            map.put("username",email);
+        }
+
+        Context context = new Context();
+        context.setVariables(map);
+        String process = templateEngine.process("mail/vercode", context);
+
+        try {
+            MailUtil.send(email, "职享网", process, true);
+        } catch (Exception e) {
+            return QiuzhiUtils.getJSONString(1,"发送验证码失败："+(e.getMessage().contains("Invalid Addresses") ? "非法邮箱，请输入有效邮箱" : e.getMessage()));
+        }
+
+        jedisAdapter.setex(RedisKeyUtil.getVerCodeKey(email),60*5,vercode);
+
+        return QiuzhiUtils.getJSONString(0,"验证码发送成功");
+    }
+
+
+
     @RequestMapping(value = "/toMessage", method = {RequestMethod.GET,RequestMethod.POST})
     public String toMessage(){
         return "user/message";
     }
+
 
     @RequestMapping(value = "/toUserCenter", method = RequestMethod.GET)
     public String toUserCenter(Model model){

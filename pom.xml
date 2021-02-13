@@ -63,6 +63,20 @@
 		</dependency>
 
 
+		<!--email-->
+		<dependency>
+			<groupId>javax.mail</groupId>
+			<artifactId>mail</artifactId>
+			<version>1.4.7</version>
+		</dependency>
+
+		<!--hutool工具包-->
+		<dependency>
+			<groupId>cn.hutool</groupId>
+			<artifactId>hutool-all</artifactId>
+			<version>5.5.8</version>
+		</dependency>
+
 		<!--fastjson-->
 		<dependency>
 			<groupId>com.alibaba</groupId>

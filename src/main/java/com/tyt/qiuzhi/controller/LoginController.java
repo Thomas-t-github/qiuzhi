@@ -4,6 +4,8 @@ import com.tyt.qiuzhi.async.EventModel;
 import com.tyt.qiuzhi.async.EventProducer;
 import com.tyt.qiuzhi.async.EventType;
 import com.tyt.qiuzhi.service.UserService;
+import com.tyt.qiuzhi.util.JedisAdapter;
+import com.tyt.qiuzhi.util.RedisKeyUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,6 +32,9 @@ public class LoginController {
     @Autowired
     EventProducer eventProducer;
 
+    @Autowired
+    JedisAdapter jedisAdapter;
+
     @RequestMapping(path = {"/reg"}, method = {RequestMethod.POST})
     @ResponseBody
     public Map reg( @RequestParam("email") String email,
@@ -43,6 +48,30 @@ public class LoginController {
 
 
         HashMap<String, Object> result = new HashMap<>();
+
+        if (!password.equals(repassword)){
+            result.put("status",1);
+            result.put("msg","两次密码不一致，请重新输入！");
+            return result;
+        }
+
+        if ("".equals(vercode)){
+            result.put("status",1);
+            result.put("msg","请输入验证码！");
+            return result;
+        }
+
+        String code = jedisAdapter.get(RedisKeyUtil.getVerCodeKey(email));
+        if (code == null){
+            result.put("status",2);
+            result.put("msg","请先获取验证码！");
+            return result;
+        }
+        if (!vercode.equals(code)){
+            result.put("status",3);
+            result.put("msg","验证码错误！");
+            return result;
+        }
 
         int expiredTime = 1;
         if (rememberme == true) {
@@ -58,9 +87,9 @@ public class LoginController {
             if (map.containsKey("ticket")) {
                 Cookie cookie = new Cookie("ticket", map.get("ticket").toString());
                 cookie.setPath("/");
-                if (rememberme == true) {
-                    cookie.setMaxAge(3600 * 24 * expiredTime);
-                }
+
+                cookie.setMaxAge(3600 * 24 * expiredTime);
+
                 response.addCookie(cookie);
 
                 /*if (StringUtils.isNotBlank(next)){
@@ -105,6 +134,24 @@ public class LoginController {
 
         Map<String, Object> result = new HashMap<>();
 
+        if ("".equals(vercode)){
+            result.put("status",1);
+            result.put("msg","请输入验证码！");
+            return result;
+        }
+
+        String code = jedisAdapter.get(RedisKeyUtil.getVerCodeKey(email));
+        if (code == null){
+            result.put("status",2);
+            result.put("msg","请先获取验证码！");
+            return result;
+        }
+        if (!vercode.equals(code)){
+            result.put("status",3);
+            result.put("msg","验证码错误！");
+            return result;
+        }
+
         try {
             int expiredTime = 1;
             if (rememberme == true){
@@ -115,9 +162,9 @@ public class LoginController {
             if (map.containsKey("ticket")){
                 Cookie cookie = new Cookie("ticket",map.get("ticket").toString());
                 cookie.setPath("/");
-                if (rememberme == true){
-                    cookie.setMaxAge(3600*24*expiredTime);
-                }
+
+                cookie.setMaxAge(3600*24*expiredTime);
+
                 response.addCookie(cookie);
 
                 //异步

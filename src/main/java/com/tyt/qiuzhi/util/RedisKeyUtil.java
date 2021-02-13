@@ -10,6 +10,11 @@ public class RedisKeyUtil {
     private static String BIZ_FOLLOWEE = "FOLLOWEE";
     private static String BIZ_TIMELINE = "TIMELINE";
     private static String BIZ_UPDATE_LIKECOUNT = "UPDATE_LIKECOUNT_SET";
+    private static String BIZ_VERCODE = "BIZ_VERCODE";
+
+    public static String getVerCodeKey(String email){
+        return BIZ_VERCODE+SPLIT+email;
+    }
 
     public static String getLikeCountSetKey(){
         return BIZ_UPDATE_LIKECOUNT;

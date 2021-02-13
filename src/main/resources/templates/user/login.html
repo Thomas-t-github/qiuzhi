@@ -35,12 +35,12 @@
                             <div class="layui-form-item">
                                 <label for="L_vercode" class="layui-form-label">邮箱验证</label>
                                 <div class="layui-input-inline">
-                                    <input type="text" id="L_vercode" name="vercode" required lay-verify="required"
+                                    <input type="text" id="L_vercode" name="vercode"
                                            placeholder="输入邮箱中的验证码" autocomplete="off" class="layui-input">
 
                                 </div>
                                 <div class="layui-form-mid">
-                                    <button id="btn_email" type="button"
+                                    <button id="btn_email" type="button" data-type="unSend" lay-submit lay-filter="btn_email"
                                             class="layui-btn layui-btn-danger layui-btn-xs">获取验证码
                                     </button>
                                 </div>
@@ -80,8 +80,29 @@
 <script src="/static/res/layui/layui.js"></script>
 <script>
 
-    layui.use('element', function () {
-        var element = layui.element;
+    layui.use(['element','form','jquery'], function () {
+        var element = layui.element
+            ,form = layui.form
+            ,$ = layui.jquery;
+
+        form.on('submit(btn_email)',function (data) {
+
+
+            var email = document.getElementById("L_email").value;
+            $.ajax({
+                type: 'post',
+                dataType: 'json',
+                data: {"email" : email},
+                url: "/user/sendEmail",
+                success: function (res) {
+                    layer.msg(res.msg);
+                }, error: function (res) {
+                    layer.msg('发送异常，请重试');
+                }
+            });
+
+            return false;
+        });
 
         //…
     });
