@@ -20,7 +20,7 @@ public interface UserDAO {
     User selectByEmail(String email);
 
     @Update({"update ", TABLE_NAME, " set password=#{password} where id=#{id}"})
-    int updatePassword(User user);
+    int updatePassword(@Param("id") int id, @Param("password") String password);
 
     @Update({"update ", TABLE_NAME, " set head_url=#{headUrl} where id=#{id}"})
     int updateHeadUrl(@Param("id") int id, @Param("headUrl") String headUrl);

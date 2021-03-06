@@ -1,6 +1,7 @@
 package com.tyt.qiuzhi.controller;
 
 import cn.hutool.extra.mail.MailUtil;
+import com.alibaba.fastjson.JSONObject;
 import com.tyt.qiuzhi.model.*;
 import com.tyt.qiuzhi.service.*;
 import com.tyt.qiuzhi.util.JedisAdapter;
@@ -18,10 +19,7 @@ import org.thymeleaf.context.Context;
 import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 @Controller
 @RequestMapping("/user")
@@ -53,6 +51,22 @@ public class UserController {
     @Autowired
     QiniuService qiniuService;
 
+    @RequestMapping(value = "/setNewPassword",method = RequestMethod.POST)
+    @ResponseBody
+    public Map setNewPassword(@RequestParam("nowpass") String nowpass,
+                                 @RequestParam("pass") String pass,
+                                 @RequestParam("repass") String repass){
+
+        Map<String,Object> map = userService.updatePassword(nowpass, pass, repass);
+        if (map.containsKey("msg")){
+            System.out.println(map.get("msg"));
+            map.put("status",1);
+            return map;
+        }
+        map.put("msg","密码修改成功");
+        map.put("status",0);
+        return map;
+    }
 
     @RequestMapping(value = "/setProfile",method = RequestMethod.POST)
     @ResponseBody
