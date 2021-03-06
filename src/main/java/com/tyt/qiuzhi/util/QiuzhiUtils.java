@@ -14,6 +14,20 @@ public class QiuzhiUtils {
 
     public static int ANONYMOUS_USERID = 3;
     public static int SYSTEM_USERID = 1;
+    public static String QINIU_DOMAIN_PREFIX = "http://qpjew6rs9.hn-bkt.clouddn.com/";
+    public static String QIUZHI_DOMAIN = "http://127.0.0.1:8080/";
+
+
+    private static String[] IMAGE_FILE_EXT = new String[]{"png","bmp","jpg","jpeg","jfif"};
+
+    public static boolean isFileAllowed(String fileExt){
+        for (String ext : IMAGE_FILE_EXT) {
+            if (ext.equals(fileExt)){
+                return true;
+            }
+        }
+        return false;
+    }
 
 
     public static String getJSONString(int status, String msg) {

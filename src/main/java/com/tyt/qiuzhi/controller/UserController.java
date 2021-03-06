@@ -2,21 +2,22 @@ package com.tyt.qiuzhi.controller;
 
 import cn.hutool.extra.mail.MailUtil;
 import com.tyt.qiuzhi.model.*;
-import com.tyt.qiuzhi.service.CollectService;
-import com.tyt.qiuzhi.service.CommentService;
-import com.tyt.qiuzhi.service.QuestionService;
-import com.tyt.qiuzhi.service.UserService;
+import com.tyt.qiuzhi.service.*;
 import com.tyt.qiuzhi.util.JedisAdapter;
 import com.tyt.qiuzhi.util.QiuzhiUtils;
 import com.tyt.qiuzhi.util.RedisKeyUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -25,6 +26,8 @@ import java.util.Random;
 @Controller
 @RequestMapping("/user")
 public class UserController {
+
+    private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
     @Autowired
     UserService userService;
@@ -46,6 +49,34 @@ public class UserController {
 
     @Autowired
     TemplateEngine templateEngine;
+
+    @Autowired
+    QiniuService qiniuService;
+
+
+    @RequestMapping(value = "/upload/",method = RequestMethod.POST)
+    @ResponseBody
+    public String upLoadImage(@RequestParam("file") MultipartFile file){
+
+        if (hostHolder.getUser() == null){
+            return "redirect:/user/toLogin";
+        }
+
+        try {
+            String fileUrl = qiniuService.saveImage(file);
+
+            if(fileUrl == null){
+                return QiuzhiUtils.getJSONString(1,"图片上传失败");
+            }
+            userService.updateHeadUrl(hostHolder.getUser().getId(),fileUrl);
+            return QiuzhiUtils.getJSONString(0);
+
+        } catch (IOException e) {
+            logger.error("图片上传失败"+e.getMessage());
+            return QiuzhiUtils.getJSONString(1,"图片上传失败");
+        }
+    }
+
 
     @RequestMapping(value = "/homepage/{uid}", method = RequestMethod.GET)
     public String homepage(Model model, @PathVariable("uid") int uid){
@@ -79,8 +110,11 @@ public class UserController {
     }
 
 
-    @RequestMapping(value = "/toSet", method = RequestMethod.GET)
+    @RequestMapping(value = "/toSet", method = {RequestMethod.GET,RequestMethod.POST})
     public String toSet(){
+        if (hostHolder.getUser() == null){
+            return "redirect:/user/toLogin";
+        }
         return "user/set";
     }
 

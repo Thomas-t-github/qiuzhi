@@ -6,6 +6,7 @@ import com.tyt.qiuzhi.model.LoginTicket;
 import com.tyt.qiuzhi.model.User;
 import com.tyt.qiuzhi.util.QiuzhiUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +20,11 @@ public class UserService {
 
     @Autowired
     LoginTicketDAO loginTicketDAO;
+
+
+    public int updateHeadUrl(int id,String headUrl){
+        return userDAO.updateHeadUrl(id,headUrl);
+    }
 
     public Map<String,Object> register(String email, String password, String nickName, int expiredTime){
         HashMap<String, Object> map = new HashMap<>();

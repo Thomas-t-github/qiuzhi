@@ -1,10 +1,7 @@
 package com.tyt.qiuzhi.dao;
 
 import com.tyt.qiuzhi.model.User;
-import org.apache.ibatis.annotations.Delete;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.annotations.*;
 
 public interface UserDAO {
 
@@ -24,6 +21,9 @@ public interface UserDAO {
 
     @Update({"update ", TABLE_NAME, " set password=#{password} where id=#{id}"})
     int updatePassword(User user);
+
+    @Update({"update ", TABLE_NAME, " set head_url=#{headUrl} where id=#{id}"})
+    int updateHeadUrl(@Param("id") int id, @Param("headUrl") String headUrl);
 
     @Delete({"delete from ", TABLE_NAME, " where id=#{id}"})
     int deleteById(int id);
