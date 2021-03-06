@@ -28,10 +28,10 @@
     <p class="fly-home-info">
         <i class="iconfont icon-kiss" title="飞吻"></i><span style="color: #FF7200;">66666 飞吻</span>
         <i class="iconfont icon-shijian"></i><span th:text="${#dates.format(owner.createdDate,'yyyy-MM-dd')}+'加入'">2015-6-17 加入</span>
-        <i class="iconfont icon-chengshi"></i><span>来自杭州</span>
+        <i class="iconfont icon-chengshi"></i><span th:text="'来自'+${user.city}">来自杭州</span>
     </p>
 
-    <p class="fly-home-sign">（人生仿若一场修行）</p>
+    <p class="fly-home-sign" th:text="${user.sign}">（人生仿若一场修行）</p>
 
     <div class="fly-sns" data-user="" id="layerPop">
         <a href="javascript:;" class="layui-btn layui-btn-primary fly-imActive" data-type="addFriend">加为好友</a>

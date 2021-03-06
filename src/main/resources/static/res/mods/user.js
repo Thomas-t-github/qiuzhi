@@ -160,6 +160,28 @@ layui.define(['laypage', 'fly', 'element', 'flow'], function(exports){
     });
   }
 
+    //修改个人资料
+    form.on('submit(setProfile)', function (data) {
+        /*var action = $(data.form).attr('action'), button = $(data.elem);
+        layer.msg("设置个人资料")
+        console.log(data.elem) //被执行事件的元素DOM对象，一般为button对象
+        console.log(data.form) //被执行提交的form对象，一般在存在form标签时才会返回
+        console.log(data.field) //当前容器的全部表单字段，名值对形式：{name: value}*/
+        $.ajax({
+            url:"/user/setProfile",
+            type:"POST",
+            data:data.field,
+            success:function (data) {
+                layer.msg("修改成功");
+            },
+            error:function (data) {
+                layer.msg("修改失败")
+            }
+        });
+
+        return false;
+    });
+
   //上传图片
   if($('.upload-img')[0]){
     layui.use('upload', function(upload){
@@ -174,7 +196,7 @@ layui.define(['laypage', 'fly', 'element', 'flow'], function(exports){
         }
         ,done: function(res){
           if(res.status == 0){
-            $.post('/user/toSet', {
+            $.post('/user/toSet/', {
               avatar: res.url
             }, function(res){
               location.reload();

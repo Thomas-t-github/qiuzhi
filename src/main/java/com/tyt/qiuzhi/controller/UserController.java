@@ -54,6 +54,28 @@ public class UserController {
     QiniuService qiniuService;
 
 
+    @RequestMapping(value = "/setProfile",method = RequestMethod.POST)
+    @ResponseBody
+    public String setProfile(@RequestParam("email") String email,
+                             @RequestParam("username") String nickName,
+                             @RequestParam("sex") int sex,
+                             @RequestParam("city") String city,
+                             @RequestParam("sign") String sign){
+        if (hostHolder.getUser() == null){
+            return "redirect:/user/toLogin";
+        }
+
+        User user = hostHolder.getUser();
+        user.setNickName(nickName);
+        user.setEmail(email);
+        user.setSex(sex);
+        user.setCity(city);
+        user.setSign(sign);
+        userService.updateProfile(user);
+        return QiuzhiUtils.getJSONString(0);
+    }
+
+
     @RequestMapping(value = "/upload/",method = RequestMethod.POST)
     @ResponseBody
     public String upLoadImage(@RequestParam("file") MultipartFile file){

@@ -125,7 +125,9 @@ public class UserService {
     }
 
 
-
+    public int updateProfile(User user){
+        return userDAO.updateProfile(user);
+    }
 
     public int addUser(User user){
         return userDAO.addUser(user);
