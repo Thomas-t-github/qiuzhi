@@ -26,6 +26,20 @@ public class UserService {
     LoginTicketDAO loginTicketDAO;
 
 
+
+    public List<User> selectUsers(int offset, int limit){
+        return userDAO.selectUsers(offset,limit);
+    }
+
+    public int updateNickName(int id,String nickName){
+        return userDAO.updateNickName(id,nickName);
+    }
+
+    public int selectUsersCount(){
+        return userDAO.selectUsersCount();
+    }
+
+
     public int updateHeadUrl(int id, String headUrl) {
         return userDAO.updateHeadUrl(id, headUrl);
     }
