@@ -1,6 +1,8 @@
 package com.tyt.qiuzhi.manage;
 
+import com.tyt.qiuzhi.model.Question;
 import com.tyt.qiuzhi.model.User;
+import com.tyt.qiuzhi.service.QuestionService;
 import com.tyt.qiuzhi.service.UserService;
 import com.tyt.qiuzhi.util.QiuzhiUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,9 +23,56 @@ public class IndexController {
     @Autowired
     UserService userService;
 
+    @Autowired
+    QuestionService questionService;
+
     @RequestMapping(value = {"/","/index"})
     public String manageIndexPage(){
         return "manage/index";
+    }
+
+    @RequestMapping(value = {"/questionPage"})
+    public String questionManagerPage(){
+        return "manage/questionManager";
+    }
+
+    @RequestMapping(value = "/questionsData",method = RequestMethod.GET)
+    @ResponseBody
+    public Map showQuestions(@RequestParam("page") int page, @RequestParam("limit") int limit){
+        Map<String, Object> result = new HashMap<>();
+
+        int offset = (page - 1) * limit;
+
+        List<Question> questions = questionService.selectLatestQuestions(0, offset, limit);
+        int count = questionService.selectQuestionsCount();
+        result.put("code",0);
+        result.put("msg","");
+        result.put("count",count);
+        result.put("data",questions);
+
+        return result;
+    }
+
+    @RequestMapping(value = "/setDescription",method = RequestMethod.GET,produces={"application/json;charset=UTF-8"})
+    @ResponseBody
+    public String setDescription(@RequestParam("id") int id, @RequestParam("description") String description){
+        if (questionService.updateDescription(id,description)){
+            return QiuzhiUtils.getJSONString(0,"修改帖子描述成功");
+        }else {
+            return QiuzhiUtils.getJSONString(1,"修改帖子描述失败");
+        }
+    }
+
+    @RequestMapping(value = "/deleteQuestion",method = RequestMethod.GET,produces={"application/json;charset=UTF-8"})
+    @ResponseBody
+    public String deleteQuestion(@RequestParam("id") int id){
+
+        if (questionService.deleteQuestion(id)){
+            return QiuzhiUtils.getJSONString(0,"删除帖子成功");
+        }else {
+            return QiuzhiUtils.getJSONString(1,"删除帖子失败");
+        }
+
     }
 
     @RequestMapping(value = "/data")

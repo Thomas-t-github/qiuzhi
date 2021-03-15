@@ -31,11 +31,11 @@
             <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
             <ul class="layui-nav layui-nav-tree"  lay-filter="test">
                 <!--添加layui-nav-itemed样式展开子列表-->
-                <li class="layui-nav-item layui-this">
-                    <a class="" href="javascript:;">用户管理</a>
-                </li>
                 <li class="layui-nav-item">
-                    <a href="/manage/questionPage">帖子管理</a>
+                    <a class="" href="/manage/index">用户管理</a>
+                </li>
+                <li class="layui-nav-item layui-this">
+                    <a href="/manage/questionPage;">帖子管理</a>
                 </li>
                 <li class="layui-nav-item">
                     <a href="javascript:;">新帖筛选</a>
@@ -50,7 +50,7 @@
     <div class="layui-body">
         <!-- 内容主体区域 -->
         <!--<div style="padding: 15px;">内容主体区域</div>-->
-        <h1 align="center">用户管理</h1>
+        <h1 align="center">帖子管理</h1>
         <table class="layui-hide" id="test" lay-filter="test"></table>
 
     </div>
@@ -91,7 +91,7 @@
 
         table.render({
             elem: '#test'
-            ,url:'/manage/usersData'
+            ,url:'/manage/questionsData'
             /*,toolbar: '#toolbarDemo' //开启头部工具栏，并为其绑定左侧模板
             ,defaultToolbar: ['filter', 'exports', 'print', { //自定义头部工具栏右侧图标。如无需自定义，去除该参数即可
                 title: '提示'
@@ -103,16 +103,13 @@
                 [
                 {type: 'checkbox', fixed: 'left'}
                 ,{field:'id', title:'ID', width:80, fixed: 'left', unresize: true, sort: true}
-                ,{field:'nickName', title:'用户名', width:150, edit: 'text'}
-                ,{field:'email', title:'邮箱', width:190, edit: 'text', templet: function(res){
-                        return '<em>'+ res.email +'</em>'
-                    }}
-                ,{field:'sex', title:'性别', width:80, edit: 'text', sort: true, templet: function(res){
-                        return res.sex > 0 ? '女' : '男';
-                    }}
-                ,{field:'city', title:'城市', width:100}
-                ,{field:'sign', title:'签名'}
-                ,{field:'createdDate', title:'加入时间', width:230, templet: function(res){
+                ,{field:'title', title:'标题', width:150, edit: 'text'}
+                ,{field:'description', title:'内容描述', width:280, edit: 'text'}
+                ,{field:'label', title:'标签', width:180, edit: 'text'}
+                ,{field:'reward', title:'悬赏', width:80, sort: true}
+                ,{field:'userId', title:'用户ID',width:100, sort: true}
+                ,{field:'commentCount', title:'评论数',width:100, sort: true}
+                ,{field:'createdDate', title:'发布时间', width:230, templet: function(res){
                         return layui.util.toDateString(res.createdDate,"yyyy-MM-dd HH:mm:ss");
                     }}
                 ,{fixed: 'right', title:'操作', toolbar: '#barDemo', width:150}
@@ -151,7 +148,7 @@
             if(obj.event === 'del'){
                 layer.confirm('真的删除行么', function(index){
                     $.ajax({
-                        url:"/manage/deleteUser",
+                        url:"/manage/deleteQuestion",
                         type:"GET",
                         data:{
                             id : data.id
@@ -160,14 +157,14 @@
 
                             if (res.status == 0){
                                 obj.del();
-                                layer.msg("删除用户成功");
+                                layer.msg("删除帖子成功");
                             }else {
                                 layer.msg(res.msg);
                             }
 
                         },
                         error:function (res) {
-                            layer.msg("删除用户失败")
+                            layer.msg("删除帖子失败")
                         }
                     });
 
@@ -176,29 +173,29 @@
             } else if(obj.event === 'edit'){
                 layer.prompt({
                     formType: 2
-                    ,value: data.nickName
+                    ,value: data.description
                 }, function(value, index){
                     $.ajax({
-                        url:"/manage/setNewNickName",
+                        url:"/manage/setDescription",
                         type:"GET",
                         data:{
                             id : data.id,
-                            nickName : value
+                            description : value
                         },
                         success:function (res) {
 
                             if (res.status == 0){
                                 obj.update({
-                                    nickName: value
+                                    description: value
                                 });
-                                layer.msg("昵称修改成功");
+                                layer.msg("帖子修改成功");
                             }else {
                                 layer.msg(res.msg);
                             }
 
                         },
                         error:function (res) {
-                            layer.msg("昵称修改失败")
+                            layer.msg("帖子修改失败")
                         }
                     });
                     layer.close(index);

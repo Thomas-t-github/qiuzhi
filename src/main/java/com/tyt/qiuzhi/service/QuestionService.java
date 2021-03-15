@@ -2,6 +2,7 @@ package com.tyt.qiuzhi.service;
 
 import com.tyt.qiuzhi.dao.QuestionDAO;
 import com.tyt.qiuzhi.model.Question;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.HtmlUtils;
@@ -25,6 +26,18 @@ public class QuestionService {
         question.setDescription(sensitiveService.filter(question.getDescription()));
         question.setTitle(sensitiveService.filter(question.getTitle()));
         return questionDAO.addQuestion(question);
+    }
+
+    public int selectQuestionsCount(){
+        return questionDAO.selectQuestionsCount();
+    }
+
+    public boolean updateDescription(int id,String description){
+        return questionDAO.updateDescription(id,description);
+    }
+
+    public boolean deleteQuestion(int id){
+        return questionDAO.deleteQuestion(id);
     }
 
     public List<Question> selectLatestQuestions(int userId, int offset, int limit){
