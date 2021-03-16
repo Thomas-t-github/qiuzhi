@@ -28,14 +28,14 @@
     <p class="fly-home-info">
         <i class="iconfont icon-kiss" title="飞吻"></i><span style="color: #FF7200;">66666 飞吻</span>
         <i class="iconfont icon-shijian"></i><span th:text="${#dates.format(owner.createdDate,'yyyy-MM-dd')}+'加入'">2015-6-17 加入</span>
-        <i class="iconfont icon-chengshi"></i><span th:text="'来自'+${user.city}">来自杭州</span>
+        <i class="iconfont icon-chengshi"></i><span th:text="'来自'+${owner.city}">来自杭州</span>
     </p>
 
-    <p class="fly-home-sign" th:text="${user.sign}">（人生仿若一场修行）</p>
+    <p class="fly-home-sign" th:text="${owner.sign}">（人生仿若一场修行）</p>
 
     <div class="fly-sns" data-user="" id="layerPop">
-        <a href="javascript:;" class="layui-btn layui-btn-primary fly-imActive" data-type="addFriend">加为好友</a>
-        <a href="javascript:;" class="layui-btn layui-btn-normal fly-imActive" data-method="chat" data-type="chat">发起会话</a>
+        <a href="javascript:;" class="layui-btn layui-btn-primary fly-imActive" id="follow" data-type="follow" th:text="${followStatus} ? '已关注' : '加为好友' ">加为好友</a>
+        <a href="javascript:;" class="layui-btn layui-btn-normal fly-imActive" id="chat" data-method="chat" data-type="chat">发起会话</a>
     </div>
 
 </div>
@@ -138,11 +138,11 @@ full: true
 
 <script src="/static/res/layui/layui.js"></script>
 <script>
-    layui.use('layer', function () { //独立版的layer无需执行这一句
+    layui.use(['layer','jquery','form'], function () { //独立版的layer无需执行这一句
         var $ = layui.jquery,form = layui.form, layer = layui.layer; //独立版的layer无需执行这一句
 
 
-        $('#layerPop .layui-btn').on('click', function(){
+        $('#chat').on('click', function(){
             layer.open({
                 type: 2,
                 area: ['700px', '400px'],
@@ -157,6 +157,55 @@ full: true
                     body.find('#uid').val($("#uid").html());
                 }
             });
+        });
+
+        $('#follow').on('click', function(){
+            //layer.msg($("#follow").html());
+            if ("加为好友" == $("#follow").html()){
+                $.ajax({
+                    url:"/follow/followUser",
+                    type:"GET",
+                    data:{
+                        userId : $("#uid").html()
+                    },
+                    success:function (res) {
+
+                        if (res.status == 0){
+                            $("#follow").text("已关注");
+                            //layer.msg("加好友成功");
+                        }else {
+                            layer.msg(res.msg);
+                        }
+
+                    },
+                    error:function (res) {
+                        layer.msg("加好友失败")
+                    }
+                });
+            }else if ("已关注" == $("#follow").html()){
+                $.ajax({
+                    url:"/follow/unfollowUser",
+                    type:"GET",
+                    data:{
+                        userId : $("#uid").html()
+                    },
+                    success:function (res) {
+
+                        if (res.status == 0){
+                            $("#follow").text("加为好友");
+                            //layer.msg("取消关注成功");
+                        }else {
+                            layer.msg(res.msg);
+                        }
+
+                    },
+                    error:function (res) {
+                        layer.msg("取消关注失败")
+                    }
+                });
+            }else {
+                layer.msg("系统出错了");
+            }
         });
 
 

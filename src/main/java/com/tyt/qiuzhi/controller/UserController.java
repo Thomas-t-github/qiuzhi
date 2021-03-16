@@ -51,6 +51,9 @@ public class UserController {
     @Autowired
     QiniuService qiniuService;
 
+    @Autowired
+    FollowService followService;
+
     @RequestMapping(value = "/setNewPassword",method = RequestMethod.POST)
     @ResponseBody
     public Map setNewPassword(@RequestParam("nowpass") String nowpass,
@@ -121,6 +124,12 @@ public class UserController {
 
         User user = userService.selectById(uid);
         List<Question> questions = questionService.selectLatestQuestions(user.getId(), 0, 10);
+        boolean followStatus = false;
+        if (hostHolder.getUser() != null){
+            followStatus = followService.isFollower(hostHolder.getUser().getId(), EntityType.ENTITY_USER, uid);
+        }
+
+        model.addAttribute("followStatus",followStatus);
 
         model.addAttribute("owner",user);
         model.addAttribute("questions",questions);
