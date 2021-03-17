@@ -6,6 +6,7 @@ import com.tyt.qiuzhi.async.EventType;
 import com.tyt.qiuzhi.model.Comment;
 import com.tyt.qiuzhi.model.EntityType;
 import com.tyt.qiuzhi.model.HostHolder;
+import com.tyt.qiuzhi.model.Question;
 import com.tyt.qiuzhi.service.CommentService;
 import com.tyt.qiuzhi.service.QuestionService;
 import com.tyt.qiuzhi.service.UserService;
@@ -49,6 +50,14 @@ public class CommentController {
 
         Map<String, Object> result = new HashMap<>();
 
+        Question question = questionService.selectById(questionId);
+
+        if (question == null){
+            result.put("status",3);
+            result.put("msg","帖子不存在！");
+            return result;
+        }
+
         try {
             if (StringUtils.isBlank(content)){
                 result.put("status",1);
@@ -76,6 +85,10 @@ public class CommentController {
 
             /*eventProducer.fireEvent(new EventModel(EventType.COMMENT)
                     .setEntityId(questionId).setActorId(comment.getUserId()));*/
+            eventProducer.fireEvent(new EventModel(EventType.COMMENT)
+                    .setActorId(hostHolder.getUser().getId()).setEntityType(EntityType.ENTITY_USER)
+                    .setEntityId(questionId).setEntityOwnerId(question.getUserId())
+                    .setExt("commentContent",content));
 
         } catch (Exception e) {
             logger.error("添加评论失败："+e.getMessage());

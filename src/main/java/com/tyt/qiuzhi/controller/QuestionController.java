@@ -51,7 +51,7 @@ public class QuestionController {
         ArrayList<ViewObject> vos = new ArrayList<>();
 
         int userId = 0;
-        List<Collect> isCollect = null;
+        List<Collect> isCollect = new ArrayList<>();
         if (hostHolder.getUser() != null){
             userId = hostHolder.getUser().getId();
             isCollect = collectService.getUserCollectStatus(hostHolder.getUser().getId(), qid, EntityType.ENTITY_QUESTION);

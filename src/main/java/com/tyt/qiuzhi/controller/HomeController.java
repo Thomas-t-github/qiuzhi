@@ -1,9 +1,7 @@
 package com.tyt.qiuzhi.controller;
 
-import com.tyt.qiuzhi.model.HostHolder;
-import com.tyt.qiuzhi.model.Question;
-import com.tyt.qiuzhi.model.User;
-import com.tyt.qiuzhi.model.ViewObject;
+import com.tyt.qiuzhi.model.*;
+import com.tyt.qiuzhi.service.CommentService;
 import com.tyt.qiuzhi.service.QuestionService;
 import com.tyt.qiuzhi.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +22,9 @@ public class HomeController {
 
     @Autowired
     UserService userService;
+
+    @Autowired
+    CommentService commentService;
 
     @Autowired
     HostHolder hostHolder;
@@ -51,6 +52,25 @@ public class HomeController {
             vos.add(vo);
         }
         return vos;
+    }
+
+    @RequestMapping(path = "/dynamic", method = {RequestMethod.GET, RequestMethod.POST})
+    public String dynamic(Model model){
+
+        ArrayList<ViewObject> vos = new ArrayList<>();
+
+
+        List<Comment> comments = commentService.selectByUserId(hostHolder.getUser() != null ? hostHolder.getUser().getId() : 3);
+        for (Comment comment : comments) {
+            ViewObject vo = new ViewObject();
+            Question question = questionService.selectById(comment.getEntityId());
+            vo.set("comment",comment);
+            vo.set("question",question);
+            vos.add(vo);
+        }
+
+        model.addAttribute("vos",vos);
+        return "dynamic";
     }
 
 }

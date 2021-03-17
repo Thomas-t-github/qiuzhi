@@ -127,14 +127,14 @@ public class LoginController {
     @ResponseBody
     public Map login( @RequestParam("email") String email,
                         @RequestParam("pass") String password,
-                        @RequestParam("vercode") String vercode,
+                        //@RequestParam("vercode") String vercode,
                         @RequestParam(value = "next",defaultValue = "") String next,
                         @RequestParam(value="rememberme", defaultValue = "false") boolean rememberme,
                         HttpServletResponse response){
 
         Map<String, Object> result = new HashMap<>();
 
-        if ("".equals(vercode)){
+        /*if ("".equals(vercode)){
             result.put("status",1);
             result.put("msg","请输入验证码！");
             return result;
@@ -150,7 +150,7 @@ public class LoginController {
             result.put("status",3);
             result.put("msg","验证码错误！");
             return result;
-        }
+        }*/
 
         try {
             int expiredTime = 1;

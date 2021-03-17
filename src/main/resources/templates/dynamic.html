@@ -1,0 +1,123 @@
+<!--导航栏开始-->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<div th:replace="head :: h_head"></div>
+<body>
+<div th:replace="head :: h_div"></div>
+<!--导航栏结束-->
+
+<!--功能面板-->
+<div class="fly-panel fly-column">
+    <div class="layui-container">
+        <ul class="layui-clear">
+            <li><a href="/">首页</a></li>
+            <li><a href="jie/index.html">提问</a></li>
+            <li><a href="jie/index.html">分享<span class="layui-badge-dot"></span></a></li>
+            <li><a href="jie/index.html">讨论</a></li>
+            <li><a href="jie/index.html">建议</a></li>
+            <li><a href="jie/index.html">公告</a></li>
+            <li class="layui-hide-xs layui-this"><a href="jie/index.html">动态</a></li>
+            <li class="layui-hide-xs layui-hide-sm layui-show-md-inline-block"><span class="fly-mid"></span></li>
+
+            <!-- 用户登入后显示 -->
+            <li class="layui-hide-xs layui-hide-sm layui-show-md-inline-block"><a href="user/index.html">我发表的贴</a></li>
+            <li class="layui-hide-xs layui-hide-sm layui-show-md-inline-block"><a href="/collect/find#collection">我收藏的贴</a>
+            </li>
+        </ul>
+
+        <div class="fly-column-right layui-hide-xs">
+            <span class="fly-search"><i class="layui-icon"></i></span>
+            <a href="jie/toAdd" class="layui-btn">发表新帖</a>
+        </div>
+        <!--<div class="layui-hide-sm layui-show-xs-block"
+             style="margin-top: -10px; padding-bottom: 10px; text-align: center;">
+            <a href="jie/toAdd" class="layui-btn">发表新帖</a>
+        </div>-->
+    </div>
+</div>
+
+<div class="layui-container">
+
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12 fly-home-da">
+            <div class="fly-panel">
+                <!--<h3 class="fly-panel-title" th:text="${owner.nickName}+' 最近的回答'">贤心 最近的回答</h3>-->
+                <div class="fly-none" th:if="${#lists.isEmpty(feeds)}"
+                     style="min-height: 50px; padding:30px 0; height:auto;"><i style="font-size:14px;">没有任何动态</i>
+                </div>
+                <ul class="home-jieda">
+                    <li th:each="feed : ${feeds}" style="background-color: #F9F9F9">
+                        <a href="" th:href="'/user/homepage/'+${feed.get('userId')}"><img style="height:35px;width:35px;border-radius:50%;line-height:50px!important;"
+                             th:src="${feed.get('userHeadUrl')}"
+                             src="https://tva1.sinaimg.cn/crop.0.0.118.118.180/5db11ff4gw1e77d3nqrv8j203b03cweg.jpg">
+                            <span th:text="${feed.get('nickName')}"></span>
+                        </a>
+                        <span th:if="${feed.type != 4}">
+                            <span th:text="' 于时间：'+${#dates.format(feed.createdDate,'yyyy-MM-dd HH:mm:ss')}">1分钟前</span>
+                            在帖子 <a href="" th:href="'/jie/detail/'+${feed.get('entityId')}" target="_blank"
+                                th:text="${feed.get('entityName')}">tips能同时渲染多个吗?</a>中评论了：
+                        </span>
+                        <span th:if="${feed.type != 1}">
+                            <span th:text="' 于时间：'+${#dates.format(feed.createdDate,'yyyy-MM-dd HH:mm:ss')}">1分钟前</span>
+                            关注了 <a href="" th:href="'/user/homepage/'+${feed.get('entityId')}" target="_blank">
+                                    <img style="height:35px;width:35px;border-radius:50%;line-height:50px!important;"
+                                        th:src="${feed.get('entityHeadUrl')}"
+                                        src="https://tva1.sinaimg.cn/crop.0.0.118.118.180/5db11ff4gw1e77d3nqrv8j203b03cweg.jpg">
+                                        <span th:text="${feed.get('entityName')}">tips能同时渲染多个吗?</span></a>
+                        </span>
+                        <div th:if="${feed.type != 4}" class="home-dacontent" th:text="${feed.get('entityContent')}">
+                            尝试给layer.photos加上这个属性试试：
+                            <pre>
+                            full: true
+                            </pre>
+                            文档没有提及
+                        </div>
+                    </li>
+                    <!--<li>
+                      <p>
+                      <span>5分钟前</span>
+                      在<a href="" target="_blank">在Fly社区用的是什么系统啊?</a>中回答：
+                      </p>
+                      <div class="home-dacontent">
+                        Fly社区采用的是NodeJS。分享出来的只是前端模版
+                      </div>
+                    </li>-->
+
+                    <!-- <div class="fly-none" style="min-height: 50px; padding:30px 0; height:auto;"><span>没有回答任何问题</span></div> -->
+                </ul>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div th:replace="head :: h_footer"></div>
+
+<script src="/static/res/layui/layui.js"></script>
+<script>
+    layui.use('element', function () {
+        var element = layui.element;
+
+        //…
+    });
+    layui.cache.page = '';
+    layui.cache.user = {
+        username: '游客'
+        , uid: -1
+        , avatar: '/static/res/images/avatar/00.jpg'
+        , experience: 83
+        , sex: '男'
+    };
+    layui.config({
+        version: "3.0.0"
+        , base: '/static/res/mods/' //这里实际使用时，建议改成绝对路径
+    }).extend({
+        fly: 'index'
+    }).use('fly');
+</script>
+
+<script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cspan id='cnzz_stat_icon_30088308'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "w.cnzz.com/c.php%3Fid%3D30088308' type='text/javascript'%3E%3C/script%3E"));</script>
+
+</body>
+</html>
