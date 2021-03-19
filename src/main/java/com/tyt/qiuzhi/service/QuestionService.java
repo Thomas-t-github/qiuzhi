@@ -2,11 +2,14 @@ package com.tyt.qiuzhi.service;
 
 import com.tyt.qiuzhi.dao.QuestionDAO;
 import com.tyt.qiuzhi.model.Question;
+import com.tyt.qiuzhi.util.JedisAdapter;
+import com.tyt.qiuzhi.util.RedisKeyUtil;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.HtmlUtils;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -18,14 +21,27 @@ public class QuestionService {
     @Autowired
     SensitiveService sensitiveService;
 
+    @Autowired
+    JedisAdapter jedisAdapter;
+
     public int addQuestion(Question question){
         //处理HTML标签
         question.setDescription(HtmlUtils.htmlEscape(question.getDescription()));
         question.setTitle(HtmlUtils.htmlEscape(question.getTitle()));
         //处理敏感词
-        question.setDescription(sensitiveService.filter(question.getDescription()));
-        question.setTitle(sensitiveService.filter(question.getTitle()));
-        return questionDAO.addQuestion(question);
+
+        List<Object> descList = sensitiveService.filter(question.getDescription());
+        List<Object> titleList = sensitiveService.filter(question.getTitle());
+        question.setDescription(descList.get(0).toString());
+        question.setTitle(titleList.get(0).toString());
+
+        int i = questionDAO.addQuestion(question);
+
+        if ((Boolean) descList.get(1) || (Boolean) titleList.get(1)) {
+            jedisAdapter.zadd(RedisKeyUtil.getIsAllowQuestion(), new Date().getTime(), String.valueOf(question.getId()));
+        }
+
+        return i;
     }
 
     public int selectQuestionsCount(){

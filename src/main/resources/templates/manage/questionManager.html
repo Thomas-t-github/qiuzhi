@@ -38,7 +38,7 @@
                     <a href="/manage/questionPage;">帖子管理</a>
                 </li>
                 <li class="layui-nav-item">
-                    <a href="javascript:;">新帖筛选</a>
+                    <a href="/manage/toNewQuestionPage">违规审核</a>
                 </li>
                 <li class="layui-nav-item">
                     <a href="javascript:;">设置广告</a>
@@ -101,19 +101,19 @@
             ,title: '用户数据表'
             ,cols: [
                 [
-                {type: 'checkbox', fixed: 'left'}
-                ,{field:'id', title:'ID', width:80, fixed: 'left', unresize: true, sort: true}
-                ,{field:'title', title:'标题', width:150, edit: 'text'}
-                ,{field:'description', title:'内容描述', width:280, edit: 'text'}
-                ,{field:'label', title:'标签', width:180, edit: 'text'}
-                ,{field:'reward', title:'悬赏', width:80, sort: true}
-                ,{field:'userId', title:'用户ID',width:100, sort: true}
-                ,{field:'commentCount', title:'评论数',width:100, sort: true}
-                ,{field:'createdDate', title:'发布时间', width:230, templet: function(res){
+                    {type: 'checkbox', fixed: 'left'}
+                    ,{field:'id', title:'ID', width:60, fixed: 'left', unresize: true, sort: true}
+                    ,{field:'title', title:'标题', width:150, edit: 'text'}
+                    ,{field:'description', title:'内容描述', width:280, edit: 'text'}
+                    ,{field:'label', title:'标签', width:180, edit: 'text'}
+                    ,{field:'reward', title:'悬赏', width:80, sort: true}
+                    ,{field:'userId', title:'用户ID',width:100, sort: true}
+                    ,{field:'commentCount', title:'评论数',width:100, sort: true}
+                    ,{field:'createdDate', title:'发布时间', width:160, templet: function(res){
                         return layui.util.toDateString(res.createdDate,"yyyy-MM-dd HH:mm:ss");
                     }}
-                ,{fixed: 'right', title:'操作', toolbar: '#barDemo', width:150}
-            ]
+                    ,{fixed: 'right', title:'操作', toolbar: '#barDemo', width:150}
+                ]
             ]
             ,page: true
         });

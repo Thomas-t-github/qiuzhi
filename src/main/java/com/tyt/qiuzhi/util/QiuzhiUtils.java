@@ -13,7 +13,7 @@ public class QiuzhiUtils {
 
 
     public static int ANONYMOUS_USERID = 3;
-    public static int SYSTEM_USERID = 1;
+    public static int SYSTEM_USERID = 10;
     public static String QINIU_DOMAIN_PREFIX = "http://qpjew6rs9.hn-bkt.clouddn.com/";
     public static String QIUZHI_DOMAIN = "http://127.0.0.1:8080/";
 

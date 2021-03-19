@@ -18,6 +18,7 @@ public interface QuestionDAO {
 
     @Insert({"insert into ", TABLE_NAME, "(", INSERT_FIELDS,
             ") values (#{title},#{description},#{label},#{reward},#{createdDate},#{userId},#{commentCount})"})
+    @Options(useGeneratedKeys = true,keyProperty = "id",keyColumn = "id")
     int addQuestion(Question question);
 
 

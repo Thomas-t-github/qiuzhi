@@ -11,6 +11,8 @@ public class RedisKeyUtil {
     private static String BIZ_TIMELINE = "TIMELINE";
     private static String BIZ_UPDATE_LIKECOUNT = "UPDATE_LIKECOUNT_SET";
     private static String BIZ_VERCODE = "BIZ_VERCODE";
+    private static String BIZ_IS_ALLOW_QUESTION = "IS_ALLOW_QUESTION";
+
 
     public static String getVerCodeKey(String email){
         return BIZ_VERCODE+SPLIT+email;
@@ -29,6 +31,9 @@ public class RedisKeyUtil {
 
     public static String getEventQueueKey(){
         return BIZ_EVENTQUEUE;
+    }
+    public static String getIsAllowQuestion(){
+        return BIZ_IS_ALLOW_QUESTION;
     }
 
     public static String getFollowerKey(int entityType,int entityId){

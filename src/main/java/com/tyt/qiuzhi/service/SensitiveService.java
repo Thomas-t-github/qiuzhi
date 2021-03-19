@@ -1,23 +1,27 @@
 package com.tyt.qiuzhi.service;
 
+import com.tyt.qiuzhi.util.JedisAdapter;
+import com.tyt.qiuzhi.util.QiuzhiUtils;
+import com.tyt.qiuzhi.util.RedisKeyUtil;
 import org.apache.commons.lang3.CharUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 @Service
-public class SensitiveService implements InitializingBean{
+public class SensitiveService implements InitializingBean {
 
     private static final Logger logger = LoggerFactory.getLogger(SensitiveService.class);
+
 
     /**
      * 敏感词替换符
@@ -30,27 +34,34 @@ public class SensitiveService implements InitializingBean{
 
     /**
      * 过滤关键词
+     *
      * @param text
      * @return
      */
-    public String filter(String text){
+    public List<Object> filter(String text) {
 
+        ArrayList<Object> list = new ArrayList<>();
         StringBuilder result = new StringBuilder();
         String replacement = DEFAULT_REPLACEMENT;
 
-        if (StringUtils.isBlank(text)){
-            return text;
+        if (StringUtils.isBlank(text)) {
+            list.add(text);
+            return list;
         }
 
         TrieNode tempNode = rootNode;
         int begin = 0;
         int position = 0;
 
-        while (begin < text.length()){
+        //记录整个句子是否有敏感词
+        boolean hasSensitive = false;
+
+
+        while (begin < text.length()) {
             char c = text.charAt(position);
             //符号直接跳过
-            if (isSymbol(c)){
-                if (tempNode == rootNode){
+            if (isSymbol(c)) {
+                if (tempNode == rootNode) {
                     result.append(c);
                     begin++;
                 }
@@ -59,19 +70,20 @@ public class SensitiveService implements InitializingBean{
             }
 
             tempNode = tempNode.getSubNode(c);
-            if (tempNode == null){
+            if (tempNode == null) {
                 result.append(text.charAt(begin));
                 begin = begin + 1;
                 position = begin;
                 tempNode = rootNode;
-            }else if (tempNode.isKeywordEnd()){
+            } else if (tempNode.isKeywordEnd()) {
                 result.append(replacement);
                 begin = position + 1;
                 position = begin;
                 tempNode = rootNode;
-            }else {
+                hasSensitive = true;
+            } else {
                 position++;
-                if (position == text.length()){
+                if (position == text.length()) {
                     result.append(text.charAt(begin));
                     begin++;
                     position = begin;
@@ -80,11 +92,16 @@ public class SensitiveService implements InitializingBean{
             }
         }
         result.append(text.substring(begin));
-        return result.toString();
+
+        list.add(result.toString());
+        list.add(hasSensitive);
+
+        return list;
     }
 
     /**
      * 初始化字典树
+     *
      * @throws Exception
      */
     @Override
@@ -97,30 +114,30 @@ public class SensitiveService implements InitializingBean{
             isr = new InputStreamReader(is);
             reader = new BufferedReader(isr);
             String lineTxt;
-            while ((lineTxt = reader.readLine()) != null){
+            while ((lineTxt = reader.readLine()) != null) {
                 lineTxt = lineTxt.trim();
                 addWord(lineTxt);
             }
 
         } catch (Exception e) {
-            logger.error("读取敏感词文件失败："+e.getMessage());
+            logger.error("读取敏感词文件失败：" + e.getMessage());
         } finally {
             try {
-                if ( reader != null){
+                if (reader != null) {
                     reader.close();
                 }
             } catch (IOException e) {
                 e.printStackTrace();
             }
             try {
-                if ( isr != null){
+                if (isr != null) {
                     isr.close();
                 }
             } catch (IOException e) {
                 e.printStackTrace();
             }
             try {
-                if ( is != null){
+                if (is != null) {
                     is.close();
                 }
             } catch (IOException e) {
@@ -132,9 +149,10 @@ public class SensitiveService implements InitializingBean{
 
     /**
      * 添加敏感词到字典树
+     *
      * @param lineTxt
      */
-    public void addWord(String lineTxt){
+    public void addWord(String lineTxt) {
         TrieNode tempNode = rootNode;
 
         for (int i = 0; i < lineTxt.length(); i++) {
@@ -142,19 +160,19 @@ public class SensitiveService implements InitializingBean{
             /**
              * 过滤掉符号干扰
              */
-            if (isSymbol(c)){
+            if (isSymbol(c)) {
                 continue;
             }
 
             TrieNode node = tempNode.getSubNode(c);
-            if (node == null){
+            if (node == null) {
                 node = new TrieNode();
-                tempNode.setSubNode(c,node);
+                tempNode.setSubNode(c, node);
             }
 
             tempNode = node;
 
-            if (i == lineTxt.length() - 1){
+            if (i == lineTxt.length() - 1) {
                 tempNode.setKeywordEnd(true);
             }
         }
@@ -162,24 +180,23 @@ public class SensitiveService implements InitializingBean{
 
     /**
      * 判断是否是一个符号
+     *
      * @param c
      * @return
      */
-    public boolean isSymbol(char c){
-        int ic = (int)c;
+    public boolean isSymbol(char c) {
+        int ic = (int) c;
         //0x2E80~0x9FFF是东亚文字范围
         return !CharUtils.isAsciiAlphanumeric(c) && (ic < 0x2E80 || ic > 0x9FFF);
     }
 
 
-
-
-    private class TrieNode{
+    private class TrieNode {
 
         /**
          * 用来存储子节点
          */
-        private Map<Character,TrieNode> subNodes = new HashMap<>();
+        private Map<Character, TrieNode> subNodes = new HashMap<>();
 
         /**
          * 用来表示敏感词的终结，true为终结
@@ -188,43 +205,48 @@ public class SensitiveService implements InitializingBean{
 
         /**
          * 设置子节点
+         *
          * @param key
          * @param node
          */
-        public void setSubNode(Character key,TrieNode node){
-            subNodes.put(key,node);
+        public void setSubNode(Character key, TrieNode node) {
+            subNodes.put(key, node);
         }
 
         /**
          * 获取子节点
+         *
          * @param key
          * @return
          */
-        public TrieNode getSubNode(Character key){
+        public TrieNode getSubNode(Character key) {
             return subNodes.get(key);
         }
 
         /**
          * 设置本节点是否是敏感词的终结
+         *
          * @param end
          */
-        public void setKeywordEnd(boolean end){
+        public void setKeywordEnd(boolean end) {
             this.end = end;
         }
 
         /**
          * 判断是否是敏感词的终结
+         *
          * @return
          */
-        public boolean isKeywordEnd(){
+        public boolean isKeywordEnd() {
             return this.end;
         }
 
         /**
          * 获取子节点的数量
+         *
          * @return
          */
-        public int getSubNodeCount(){
+        public int getSubNodeCount() {
             return subNodes.size();
         }
 
