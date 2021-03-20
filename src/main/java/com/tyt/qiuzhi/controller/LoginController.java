@@ -115,12 +115,12 @@ public class LoginController {
 
     @RequestMapping("/toReg")
     public String toRegister(){
-        return "/user/reg";
+        return "user/reg";
     }
 
     @RequestMapping("/toLogin")
     public String toLogin(){
-        return "/user/login";
+        return "user/login";
     }
 
     @RequestMapping(path = {"/login"}, method = {RequestMethod.POST})
@@ -213,7 +213,7 @@ public class LoginController {
     @RequestMapping(path = {"/relogin"}, method = {RequestMethod.GET})
     public String relogin(Model model, @RequestParam("next") String next){
         model.addAttribute("next",next);
-        return "/user/login";
+        return "user/login";
     }
 
 }

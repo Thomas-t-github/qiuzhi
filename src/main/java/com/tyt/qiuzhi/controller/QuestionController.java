@@ -123,7 +123,7 @@ public class QuestionController {
 
     @RequestMapping("/toAdd")
     public String toAdd(){
-        return "/jie/add";
+        return "jie/add";
     }
 
 }

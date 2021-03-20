@@ -1,6 +1,7 @@
 package com.tyt.qiuzhi.service;
 
 import com.tyt.qiuzhi.dao.QuestionDAO;
+import com.tyt.qiuzhi.model.EntityType;
 import com.tyt.qiuzhi.model.Question;
 import com.tyt.qiuzhi.util.JedisAdapter;
 import com.tyt.qiuzhi.util.RedisKeyUtil;
@@ -20,6 +21,9 @@ public class QuestionService {
 
     @Autowired
     SensitiveService sensitiveService;
+
+    @Autowired
+    CommentService commentService;
 
     @Autowired
     JedisAdapter jedisAdapter;
@@ -53,6 +57,7 @@ public class QuestionService {
     }
 
     public boolean deleteQuestion(int id){
+        commentService.deleteComment(id, EntityType.ENTITY_QUESTION);
         return questionDAO.deleteQuestion(id);
     }
 
