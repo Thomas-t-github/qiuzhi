@@ -8,6 +8,9 @@
     <meta name="description" content="Fly社区是模块化前端UI框架Layui的官网社区，致力于为web开发提供强劲动力">
     <link rel="stylesheet" href="/static/res/layui/css/layui.css">
     <link rel="stylesheet" href="/static/res/css/global.css">
+    <style>
+        .layui-nav .layui-nav-item a:hover{color: #009688; transition: all .3s;}
+    </style>
 </head>
 <body>
 
@@ -54,7 +57,7 @@
             登入后的状态
             <li class="layui-nav-item">
                 <a class="fly-nav-avatar" href="javascript:;">
-                    <cite class="layui-hide-xs" th:text="${user.nickName}">贤心</cite>
+                    <cite class="layui-hide-xs" style="color: #FBFBFB" th:text="${user.nickName}">Thomas</cite>
                     <i class="iconfont icon-renzheng layui-hide-xs" title="认证信息：layui 作者"></i>
                     <i class="layui-badge fly-badge-vip layui-hide-xs">VIP3</i>
                     <img th:src="${user.headUrl}" src="https://tva1.sinaimg.cn/crop.0.0.118.118.180/5db11ff4gw1e77d3nqrv8j203b03cweg.jpg">
@@ -68,6 +71,99 @@
                 </dl>
             </li>
         </ul>
+    </div>
+</div>
+
+<!--功能面板-->
+<div class="fly-panel fly-column" th:fragment="h_panel">
+    <div class="layui-container">
+        <ul class="layui-clear layui-nav layui-bg-red">
+            <li class="layui-nav-item"><a href="/">首页</a></li>
+
+
+            <li class="layui-nav-item">
+                <a href="javascript:;">国家重点</a>
+                <dl class="layui-nav-child">
+                    <dd><a href="">金融银行</a></dd>
+                    <dd><a href="">保险</a></dd>
+                    <dd><a href="">人力资源</a></dd>
+                    <dd><a href="">互联网</a></dd>
+                    <dd><a href="">教育培训</a></dd>
+                    <dd><a href="">文化娱乐</a></dd>
+                </dl>
+            </li>
+            <li class="layui-nav-item">
+                <a href="javascript:;">省级重点</a>
+                <dl class="layui-nav-child">
+                    <dd><a href="">金融银行</a></dd>
+                    <dd><a href="">保险</a></dd>
+                    <dd><a href="">人力资源</a></dd>
+                    <dd><a href="">互联网</a></dd>
+                    <dd><a href="">教育培训</a></dd>
+                    <dd><a href="">文化娱乐</a></dd>
+                </dl>
+            </li>
+            <li class="layui-nav-item">
+                <a href="javascript:;">一类本科</a>
+                <dl class="layui-nav-child">
+                    <dd><a href="">金融银行</a></dd>
+                    <dd><a href="">保险</a></dd>
+                    <dd><a href="">人力资源</a></dd>
+                    <dd><a href="">互联网</a></dd>
+                    <dd><a href="">教育培训</a></dd>
+                    <dd><a href="">文化娱乐</a></dd>
+                </dl>
+            </li>
+            <li class="layui-nav-item">
+                <a href="javascript:;">二类本科</a>
+                <dl class="layui-nav-child">
+                    <dd><a href="">金融银行</a></dd>
+                    <dd><a href="">保险</a></dd>
+                    <dd><a href="">人力资源</a></dd>
+                    <dd><a href="">互联网</a></dd>
+                    <dd><a href="">教育培训</a></dd>
+                    <dd><a href="">文化娱乐</a></dd>
+                </dl>
+            </li>
+            <li class="layui-nav-item">
+                <a href="javascript:;">三类本科</a>
+                <dl class="layui-nav-child">
+                    <dd><a href="">金融银行</a></dd>
+                    <dd><a href="">保险</a></dd>
+                    <dd><a href="">人力资源</a></dd>
+                    <dd><a href="">互联网</a></dd>
+                    <dd><a href="">教育培训</a></dd>
+                    <dd><a href="">文化娱乐</a></dd>
+                </dl>
+            </li>
+            <li class="layui-nav-item">
+                <a href="javascript:;">专科</a>
+                <dl class="layui-nav-child">
+                    <dd><a href="">金融银行</a></dd>
+                    <dd><a href="">保险</a></dd>
+                    <dd><a href="">人力资源</a></dd>
+                    <dd><a href="">互联网</a></dd>
+                    <dd><a href="">教育培训</a></dd>
+                    <dd><a href="">文化娱乐</a></dd>
+                </dl>
+            </li>
+            <li class="layui-nav-item"><a href="/feed/pushfeeds">动态<span class="layui-badge-dot"></span></a></li>
+            <li class="layui-hide-xs layui-nav-item layui-hide-sm layui-show-md-inline-block"><span class="fly-mid"></span></li>
+
+            <!-- 用户登入后显示 -->
+            <li class="layui-hide-xs layui-nav-item layui-hide-sm layui-show-md-inline-block"><a href="/collect/find#index">我发表的贴</a></li>
+            <li class="layui-hide-xs layui-nav-item layui-hide-sm layui-show-md-inline-block"><a href="/collect/find#collection">我收藏的贴</a>
+            </li>
+        </ul>
+
+        <div class="fly-column-right layui-hide-xs">
+            <span class="fly-search"><i class="layui-icon"></i></span>
+            <a href="jie/toAdd" class="layui-btn">发表新帖</a>
+        </div>
+        <!--<div class="layui-hide-sm layui-show-xs-block"
+             style="margin-top: -10px; padding-bottom: 10px; text-align: center;">
+            <a href="jie/toAdd" class="layui-btn">发表新帖</a>
+        </div>-->
     </div>
 </div>
 
@@ -146,4 +242,17 @@
     </div>
 
 </div>
+<script src="/static/res/layui/layui.js"></script>
+<script>
+    layui.use('element', function(){
+        var element = layui.element; //导航的hover效果、二级菜单等功能，需要依赖element模块
+
+        //监听导航点击
+        element.on('nav(demo)', function(elem){
+            //console.log(elem)
+            layer.msg(elem.text());
+        });
+    });
+</script>
+
 </body>

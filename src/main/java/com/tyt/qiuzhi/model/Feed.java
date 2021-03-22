@@ -18,7 +18,7 @@ public class Feed {
     private int type;           //事件类型
     private int userId;             //事件的主角
     private Date createdDate;       //事件产生时间
-    private String data;            //事假携带的数据
+    private String data;            //事件携带的数据
     private JSONObject dataJSON = null;         //方便渲染引擎获取数据
 
     public String get(String key) {
