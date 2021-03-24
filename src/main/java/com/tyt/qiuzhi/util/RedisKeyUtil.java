@@ -12,10 +12,15 @@ public class RedisKeyUtil {
     private static String BIZ_UPDATE_LIKECOUNT = "UPDATE_LIKECOUNT_SET";
     private static String BIZ_VERCODE = "BIZ_VERCODE";
     private static String BIZ_IS_ALLOW_QUESTION = "IS_ALLOW_QUESTION";
+    private static String BIZ_MANAGER_INFO_KEY = "MANAGER_INFO_KEY";
 
 
     public static String getVerCodeKey(String email){
         return BIZ_VERCODE+SPLIT+email;
+    }
+
+    public static String getManagerInfoKey(String managerName){
+        return BIZ_MANAGER_INFO_KEY+SPLIT+managerName;
     }
 
     public static String getLikeCountSetKey(){

@@ -3,7 +3,9 @@ package com.tyt.qiuzhi;
 import com.tyt.qiuzhi.dao.QuestionDAO;
 import com.tyt.qiuzhi.dao.UserDAO;
 import com.tyt.qiuzhi.model.User;
+import com.tyt.qiuzhi.util.JedisAdapter;
 import com.tyt.qiuzhi.util.QiuzhiUtils;
+import com.tyt.qiuzhi.util.RedisKeyUtil;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -22,6 +24,18 @@ public class InitDatabaseTests {
 
     @Autowired
     UserDAO userDAO;
+
+    @Autowired
+    JedisAdapter jedisAdapter;
+
+    @Test
+    void init_manager_info(){
+
+        jedisAdapter.set(RedisKeyUtil.getManagerInfoKey("admin"),"12345678");
+        System.out.println(jedisAdapter.get(RedisKeyUtil.getManagerInfoKey("admin")));
+
+    }
+
 
     @Test
     void init_data(){

@@ -1,6 +1,7 @@
 package com.tyt.qiuzhi.config;
 
 import com.tyt.qiuzhi.interceptor.LoginRequiredInterceptor;
+import com.tyt.qiuzhi.interceptor.ManagePassportInterceptor;
 import com.tyt.qiuzhi.interceptor.PassportInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -23,10 +24,14 @@ public class QiuzhiWebConfiguration extends WebMvcConfigurationSupport {
     @Autowired
     LoginRequiredInterceptor loginRequiredInterceptor;
 
+    @Autowired
+    ManagePassportInterceptor managePassportInterceptor;
+
     @Override
     protected void addInterceptors(InterceptorRegistry registry) {
 
         registry.addInterceptor(passportInterceptor);
+        registry.addInterceptor(managePassportInterceptor).addPathPatterns("/manage/index","/manage/toNewQuestionPage","/manage/questionPage");
         registry.addInterceptor(loginRequiredInterceptor).addPathPatterns("/jie/toAdd");
         super.addInterceptors(registry);
     }

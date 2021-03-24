@@ -51,6 +51,23 @@ public class JedisAdapter implements InitializingBean {
         return null;
     }
 
+    public String set(String key,String value){
+
+        Jedis jedis = null;
+        try {
+            jedis = pool.getResource();
+            return jedis.set(key,value);
+        } catch (Exception e) {
+            logger.error("Jedis发生异常" + e.getMessage());
+        } finally {
+            if (jedis != null) {
+                jedis.close();
+            }
+        }
+
+        return null;
+    }
+
     public String get(String key){
 
         Jedis jedis = null;
