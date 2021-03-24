@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>职享网</title>
+    <link rel="stylesheet" href="/static/res/layui/css/layui.css">
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        <div style="color: #FBFBFB" class="layui-logo"><p>职享网后台管理</p></div>
+
+        <ul class="layui-nav layui-layout-right">
+            <li class="layui-nav-item">
+                <a style="color: #FBFBFB" href="javascript:;">
+                    <img src="http://qpjew6rs9.hn-bkt.clouddn.com/d18d5165fd06437dbb2ea5e30988df98.jpg"
+                         class="layui-nav-img">
+                    admin
+                </a>
+                <dl class="layui-nav-child">
+                    <dd><a href="">基本资料</a></dd>
+                    <dd><a href="">安全设置</a></dd>
+                </dl>
+            </li>
+            <li class="layui-nav-item"><a style="color: #FBFBFB" href="">安全退出</a></li>
+        </ul>
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            <ul class="layui-nav layui-nav-tree" lay-filter="test">
+                <!--添加layui-nav-itemed样式展开子列表-->
+                <li class="layui-nav-item">
+                    <a style="color: #FBFBFB" class="" href="/manage/index">用户管理</a>
+                </li>
+                <li class="layui-nav-item">
+                    <a style="color: #FBFBFB" href="/manage/questionPage;">帖子管理</a>
+                </li>
+                <li class="layui-nav-item">
+                    <a style="color: #FBFBFB" href="/manage/toNewQuestionPage">违规审核</a>
+                </li>
+                <li class="layui-nav-item layui-this">
+                    <a style="color: #FBFBFB" href="/manage/toSetAdv">设置广告</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="layui-body">
+        <!-- 内容主体区域 -->
+        <!--<div style="padding: 15px;">内容主体区域</div>-->
+        <h1 align="center">广告设置</h1>
+
+        <form class="layui-form layui-form-pane" action="/manage/setAdv">
+            <div class="layui-form-item">
+                <label class="layui-form-label">标题</label>
+                <div class="layui-input-block">
+                    <input type="text" name="title" autocomplete="off" placeholder="请输入标题" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">网站链接</label>
+                <div class="layui-input-block">
+                    <input type="text" name="siteLink" autocomplete="off" placeholder="请输入网站链接" class="layui-input">
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">开始日期</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="startDate" id="startDate" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">结束日期</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="endDate" id="endDate" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="layui-upload">
+                <button type="button" class="layui-btn" id="test2"><i class="layui-icon">&#xe67c;</i>上传图片</button>
+                <blockquote class="layui-elem-quote layui-quote-nm" style="margin-top: 10px;">
+                    预览图：
+                    <div class="layui-upload-list" id="demo2"></div>
+                </blockquote>
+            </div>
+
+            <div class="layui-form-item">
+                <button class="layui-btn" lay-submit="*" lay-filter="demo2">确认设置</button>
+            </div>
+
+
+        </form>
+    </div>
+
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+    </div>
+</div>
+
+
+<script src="/static/res/layui/layui.js" charset="utf-8"></script>
+<!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
+<script>
+    //JavaScript代码区域
+    layui.use(['upload','jquery','form','layer', 'layedit', 'laydate'], function () {
+        var upload = layui.upload
+            ,$ = layui.jquery
+            ,form = layui.form
+            ,layer = layui.layer
+            ,layedit = layui.layedit
+            ,laydate = layui.laydate;
+
+        //监听提交
+        form.on('submit(demo2)', function(data){
+            layer.alert(JSON.stringify(data.field), {
+                title: '最终的提交信息'
+            })
+            $.ajax({
+                url: "/manage/setAdv",
+                type: "POST",
+                data: data.field,
+                success: function (res) {
+
+                    if (res.status == 0){
+                        layer.msg(res.msg);
+                    }else {
+                        layer.msg(res.msg);
+                    }
+
+                },
+                error: function (res) {
+                    layer.msg(res.msg);
+                }
+            });
+            return false;
+        });
+
+        //日期
+        laydate.render({
+            elem: '#startDate'
+            ,format: 'yyyy-MM-dd HH:mm:ss'
+        });
+        laydate.render({
+            elem: '#endDate'
+            ,format: 'yyyy-MM-dd HH:mm:ss'
+        });
+
+        //多图片上传
+        upload.render({
+            elem: '#test2'
+            ,url: '/manage/uploadImage' //改成您自己的上传接口
+            ,multiple: true
+            ,before: function(obj){
+                //预读本地文件示例，不支持ie8
+                obj.preview(function(index, file, result){
+                    $('#demo2').append('<img style="width: 800px;height: 160px" src="'+ result +'" alt="'+ file.name +'" class="layui-upload-img">')
+                });
+            }
+            ,done: function(res){
+                //上传完毕
+                if(res.status == 0){
+                    layer.msg(res.msg);
+                }
+            }
+        });
+
+    });
+</script>
+</body>
+</html>

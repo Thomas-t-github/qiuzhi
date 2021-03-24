@@ -1,9 +1,12 @@
 package com.tyt.qiuzhi.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.tyt.qiuzhi.model.*;
 import com.tyt.qiuzhi.service.CommentService;
 import com.tyt.qiuzhi.service.QuestionService;
 import com.tyt.qiuzhi.service.UserService;
+import com.tyt.qiuzhi.util.JedisAdapter;
+import com.tyt.qiuzhi.util.RedisKeyUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -27,12 +30,20 @@ public class HomeController {
     CommentService commentService;
 
     @Autowired
+    JedisAdapter jedisAdapter;
+
+    @Autowired
     HostHolder hostHolder;
 
     @RequestMapping(path = {"/", "/index"}, method = {RequestMethod.GET, RequestMethod.POST})
     public String index(Model model){
 
         List<ViewObject> questions = getQuestions(0, 0, 10);
+        String advertisementJson = jedisAdapter.get(RedisKeyUtil.getBizAdvertisementKey());
+        if (advertisementJson != null){
+            Advertisement advertisement = JSONObject.parseObject(advertisementJson, Advertisement.class);
+            model.addAttribute("advertisement",advertisement);
+        }
         model.addAttribute("vos",questions);
         return "index";
     }

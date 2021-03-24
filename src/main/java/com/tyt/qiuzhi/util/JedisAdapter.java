@@ -84,6 +84,20 @@ public class JedisAdapter implements InitializingBean {
 
         return null;
     }
+    public void del(String key){
+
+        Jedis jedis = null;
+        try {
+            jedis = pool.getResource();
+            jedis.del(key);
+        } catch (Exception e) {
+            logger.error("Jedis发生异常" + e.getMessage());
+        } finally {
+            if (jedis != null) {
+                jedis.close();
+            }
+        }
+    }
 
     public long sadd(String key, String value) {
         Jedis jedis = null;

@@ -13,10 +13,19 @@ public class RedisKeyUtil {
     private static String BIZ_VERCODE = "BIZ_VERCODE";
     private static String BIZ_IS_ALLOW_QUESTION = "IS_ALLOW_QUESTION";
     private static String BIZ_MANAGER_INFO_KEY = "MANAGER_INFO_KEY";
+    private static String BIZ_ADVERTISEMENT_KEY = "ADVERTISEMENT_KEY";
+    private static String BIZ_ADVERTISEMENT_IMAGE_KEY = "ADVERTISEMENT_IMAGE_KEY";
 
 
     public static String getVerCodeKey(String email){
         return BIZ_VERCODE+SPLIT+email;
+    }
+
+    public static String getBizAdvertisementKey(){
+        return BIZ_ADVERTISEMENT_KEY;
+    }
+    public static String getBizAdvertisementImageKey(){
+        return BIZ_ADVERTISEMENT_IMAGE_KEY;
     }
 
     public static String getManagerInfoKey(String managerName){
