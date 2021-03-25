@@ -1,5 +1,6 @@
 package com.tyt.qiuzhi.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.tyt.qiuzhi.async.EventModel;
 import com.tyt.qiuzhi.async.EventProducer;
 import com.tyt.qiuzhi.async.EventType;
@@ -8,6 +9,7 @@ import com.tyt.qiuzhi.service.*;
 import com.tyt.qiuzhi.util.JedisAdapter;
 import com.tyt.qiuzhi.util.LabelKeyUtil;
 import com.tyt.qiuzhi.util.QiuzhiUtils;
+import com.tyt.qiuzhi.util.RedisKeyUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,6 +47,9 @@ public class QuestionController {
     @Autowired
     EventProducer eventProducer;
 
+    @Autowired
+    JedisAdapter jedisAdapter;
+
     @RequestMapping(value = "/detail/{qid}", method = {RequestMethod.GET})
     public String questionDetail(Model model, @PathVariable("qid") int qid){
 
@@ -70,6 +75,12 @@ public class QuestionController {
             vos.add(vo);
         }
         model.addAttribute("isCollect",isCollect.size() > 0 ? isCollect.get(0) : null);
+
+        String advertisementJson = jedisAdapter.get(RedisKeyUtil.getBizAdvertisementKey());
+        if (advertisementJson != null){
+            Advertisement advertisement = JSONObject.parseObject(advertisementJson, Advertisement.class);
+            model.addAttribute("advertisement",advertisement);
+        }
 
         model.addAttribute("question",question);
         model.addAttribute("vos",vos);
