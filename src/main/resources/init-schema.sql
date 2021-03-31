@@ -27,6 +27,17 @@
     UNIQUE KEY `email` (`email`)
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+  DROP TABLE IF EXISTS `oauth`;
+  CREATE TABLE `oauth` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `user_id` INT NOT NULL,
+  `open_id` VARCHAR(255) NOT NULL,
+  `app_type` INT NOT NULL,
+  `created_date` DATETIME NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `oauth_index` (`app_type` ASC, `open_id` ASC)
+  ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
   DROP TABLE IF EXISTS `login_ticket`;
   CREATE TABLE `login_ticket` (
     `id` INT NOT NULL AUTO_INCREMENT,

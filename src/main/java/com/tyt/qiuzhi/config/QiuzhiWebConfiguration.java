@@ -31,7 +31,7 @@ public class QiuzhiWebConfiguration extends WebMvcConfigurationSupport {
     protected void addInterceptors(InterceptorRegistry registry) {
 
         registry.addInterceptor(passportInterceptor);
-        registry.addInterceptor(managePassportInterceptor).addPathPatterns("/manage/index","/manage/toNewQuestionPage","/manage/questionPage");
+        registry.addInterceptor(managePassportInterceptor).addPathPatterns("/manage/index","/manage/toNewQuestionPage","/manage/questionPage","/manage/toSetAdv");
         registry.addInterceptor(loginRequiredInterceptor).addPathPatterns("/jie/toAdd");
         super.addInterceptors(registry);
     }

@@ -33,7 +33,7 @@ public class ManagePassportInterceptor implements HandlerInterceptor {
         }
         if (ticket != null){
             LoginTicket loginTicket = loginTicketDAO.selectByTicket(ticket);
-            if (loginTicket == null || loginTicket.getExpired().before(new Date()) || loginTicket.getStatus() != 0){
+            if (loginTicket == null || loginTicket.getUserId() != 0 || loginTicket.getExpired().before(new Date()) || loginTicket.getStatus() != 0){
                 httpServletResponse.sendRedirect("/manage/relogin?next="+httpServletRequest.getRequestURI());
                 return false;
             }

@@ -8,7 +8,8 @@ public enum  EventType {
     MAIL(3),
     FOLLOW(4),
     ADD_QUESTION(5),
-    VIOLATION_QUESTION(6);
+    VIOLATION_QUESTION(6),
+    QQ_LOGIN(7);
 
     private int value;
 

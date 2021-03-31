@@ -76,6 +76,12 @@
 			<version>1.4.7</version>
 		</dependency>
 
+		<!--QQ授权登录依赖包-->
+		<dependency>
+			<groupId>net.open</groupId>
+			<artifactId>Sdk4J</artifactId>
+			<version>2.0</version>
+		</dependency>
 
 		<!--hutool工具包-->
 		<dependency>

@@ -72,7 +72,6 @@ public class MessageController {
             if (hostHolder.getUser() == null){
                 return "redirect:/user/toLogin";
             }
-
             List<Message> conversationList = messageService.getConversationList(hostHolder.getUser().getId(), 0, 10);
             List<ViewObject> vos = new ArrayList<>();
 
@@ -91,7 +90,9 @@ public class MessageController {
             model.addAttribute("conversations",vos);
             model.addAttribute("systemMessages",systemMessages);
             model.addAttribute("conversationId",conversationId);
-            model.addAttribute("detailUser",userService.selectById(1));
+            if (hostHolder.getUser() != null){
+                model.addAttribute("detailUser",hostHolder.getUser());
+            }
         } catch (Exception e) {
             logger.error("获取消息列表失败："+e.getMessage());
         }

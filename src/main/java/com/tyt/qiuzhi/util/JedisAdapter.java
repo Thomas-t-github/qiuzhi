@@ -34,6 +34,24 @@ public class JedisAdapter implements InitializingBean {
         return pool.getResource();
     }
 
+
+    public Long incr(String key,Long increment){
+
+        Jedis jedis = null;
+        try {
+            jedis = pool.getResource();
+            return jedis.incrBy(key,increment);
+        } catch (Exception e) {
+            logger.error("Jedis发生异常" + e.getMessage());
+        } finally {
+            if (jedis != null) {
+                jedis.close();
+            }
+        }
+
+        return null;
+    }
+
     public String setex(String key,int seconds,String value){
 
         Jedis jedis = null;

@@ -1,7 +1,9 @@
 package com.tyt.qiuzhi;
 
+import com.tyt.qiuzhi.dao.OauthDAO;
 import com.tyt.qiuzhi.dao.QuestionDAO;
 import com.tyt.qiuzhi.dao.UserDAO;
+import com.tyt.qiuzhi.model.Oauth;
 import com.tyt.qiuzhi.model.User;
 import com.tyt.qiuzhi.util.JedisAdapter;
 import com.tyt.qiuzhi.util.QiuzhiUtils;
@@ -9,6 +11,7 @@ import com.tyt.qiuzhi.util.RedisKeyUtil;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.util.Assert;
 
 
 import java.util.Date;
@@ -26,7 +29,37 @@ public class InitDatabaseTests {
     UserDAO userDAO;
 
     @Autowired
+    OauthDAO oauthDAO;
+
+    @Autowired
     JedisAdapter jedisAdapter;
+
+    @Test
+    void test_oauthDAO(){
+
+        Oauth oauth = new Oauth();
+        oauth.setUserId(3);
+        oauth.setOpenId("sadhakhdwkadhjhwdjahd");
+        oauth.setAppType(1);
+        oauth.setCreatedDate(new Date());
+
+        oauthDAO.addOauth(oauth);
+
+        Oauth entity = oauthDAO.selectByEntity(oauth.getOpenId(), oauth.getAppType());
+
+        Assert.notNull(entity);
+        Assert.isTrue(oauth.getUserId() == entity.getUserId());
+
+    }
+
+    @Test
+    void init_redis_key(){
+
+        jedisAdapter.set(RedisKeyUtil.getBizRedisIncrKey(),"123456789999999");
+        System.out.println(jedisAdapter.get(RedisKeyUtil.getBizRedisIncrKey()));
+        System.out.println(jedisAdapter.incr(RedisKeyUtil.getBizRedisIncrKey(), 1l));
+
+    }
 
     @Test
     void init_manager_info(){

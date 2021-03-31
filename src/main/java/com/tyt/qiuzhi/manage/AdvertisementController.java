@@ -63,19 +63,18 @@ public class AdvertisementController {
             advertisement.setEndDate(dateFormat.parse(startDate));
             advertisement.setImageUrl(images);
 
+            int time = (int) (dateFormat.parse(endDate).getTime()-dateFormat.parse(startDate).getTime());
             jedisAdapter.setex(RedisKeyUtil.getBizAdvertisementKey(),
-                    (int) (dateFormat.parse(endDate).getTime()-dateFormat.parse(startDate).getTime()),
+                    time < 0 ? Integer.MAX_VALUE : time,
                     JSONObject.toJSONString(advertisement));
 
             jedisAdapter.del(RedisKeyUtil.getBizAdvertisementImageKey());
-
+            return QiuzhiUtils.getJSONString(0,"设置广告成功");
         } catch (ParseException e) {
             logger.error("日期转换异常："+e.getMessage());
         }
 
-
-
-        return QiuzhiUtils.getJSONString(0,"设置广告成功");
+        return QiuzhiUtils.getJSONString(1,"设置广告失败");
     }
 
     @RequestMapping("/uploadImage")

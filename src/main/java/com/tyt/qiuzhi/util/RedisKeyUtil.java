@@ -15,6 +15,7 @@ public class RedisKeyUtil {
     private static String BIZ_MANAGER_INFO_KEY = "MANAGER_INFO_KEY";
     private static String BIZ_ADVERTISEMENT_KEY = "ADVERTISEMENT_KEY";
     private static String BIZ_ADVERTISEMENT_IMAGE_KEY = "ADVERTISEMENT_IMAGE_KEY";
+    private static String BIZ_REDIS_INCR_KEY = "REDIS_INCR_KEY";
 
 
     public static String getVerCodeKey(String email){
@@ -24,6 +25,11 @@ public class RedisKeyUtil {
     public static String getBizAdvertisementKey(){
         return BIZ_ADVERTISEMENT_KEY;
     }
+
+    public static String getBizRedisIncrKey(){
+        return BIZ_REDIS_INCR_KEY;
+    }
+
     public static String getBizAdvertisementImageKey(){
         return BIZ_ADVERTISEMENT_IMAGE_KEY;
     }

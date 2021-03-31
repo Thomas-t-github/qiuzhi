@@ -34,7 +34,7 @@
         </li>
 
 
-        <li th:each="vo : ${conversations}" th:if="${vo.get('listUser').id} != 1" th:class="${vo.get('listUser').id} != ${detailUser.id} ? 'layui-nav-item' : 'layui-nav-item layui-this'" class="layui-nav-item layui-this">
+        <li th:each="vo : ${conversations}" th:class="${vo.get('listUser').id} != ${detailUser.id} ? 'layui-nav-item' : 'layui-nav-item layui-this'" class="layui-nav-item layui-this">
             <a href="/msg/list" th:href="'/msg/detail/'+${vo.get('conversationId')}">
                 <img style="height:35px;width:35px;border-radius:50%;line-height:50px!important;"
                      th:src="${vo.get('listUser').headUrl}"

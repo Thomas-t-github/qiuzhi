@@ -1,12 +1,12 @@
 package com.tyt.qiuzhi.controller;
 
+
 import com.tyt.qiuzhi.async.EventModel;
 import com.tyt.qiuzhi.async.EventProducer;
 import com.tyt.qiuzhi.async.EventType;
 import com.tyt.qiuzhi.service.UserService;
 import com.tyt.qiuzhi.util.JedisAdapter;
 import com.tyt.qiuzhi.util.RedisKeyUtil;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +15,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.Map;
@@ -34,6 +33,8 @@ public class LoginController {
 
     @Autowired
     JedisAdapter jedisAdapter;
+
+
 
     @RequestMapping(path = {"/reg"}, method = {RequestMethod.POST})
     @ResponseBody
