@@ -55,7 +55,7 @@ public class InitDatabaseTests {
     @Test
     void init_redis_key(){
 
-        jedisAdapter.set(RedisKeyUtil.getBizRedisIncrKey(),"123456789999999");
+        jedisAdapter.set(RedisKeyUtil.getBizRedisIncrKey(),"123456889999999");
         System.out.println(jedisAdapter.get(RedisKeyUtil.getBizRedisIncrKey()));
         System.out.println(jedisAdapter.incr(RedisKeyUtil.getBizRedisIncrKey(), 1l));
 

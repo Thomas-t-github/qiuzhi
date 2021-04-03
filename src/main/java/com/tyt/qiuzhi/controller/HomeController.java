@@ -38,7 +38,7 @@ public class HomeController {
     @RequestMapping(path = {"/", "/index"}, method = {RequestMethod.GET, RequestMethod.POST})
     public String index(Model model){
 
-        List<ViewObject> questions = getQuestions(0, 0, 10);
+        List<ViewObject> questions = getQuestions(0, 0, 20);
         String advertisementJson = jedisAdapter.get(RedisKeyUtil.getBizAdvertisementKey());
         if (advertisementJson != null){
             Advertisement advertisement = JSONObject.parseObject(advertisementJson, Advertisement.class);
@@ -46,6 +46,36 @@ public class HomeController {
         }
         model.addAttribute("vos",questions);
         return "index";
+    }
+
+    @RequestMapping(path = {"/queryByLabel"}, method = {RequestMethod.GET, RequestMethod.POST})
+    public String queryByLabel(Model model,@RequestParam("label") String label,
+                               @RequestParam(value = "offset",defaultValue = "0") int offset,
+                               @RequestParam(value = "limit",defaultValue = "20") int limit){
+
+        List<ViewObject> questions = getQuestions(label,offset,limit);
+        String advertisementJson = jedisAdapter.get(RedisKeyUtil.getBizAdvertisementKey());
+        if (advertisementJson != null){
+            Advertisement advertisement = JSONObject.parseObject(advertisementJson, Advertisement.class);
+            model.addAttribute("advertisement",advertisement);
+        }
+        model.addAttribute("vos",questions);
+        return "index";
+    }
+
+    private List<ViewObject> getQuestions(String label,int offset,int limit){
+        List<ViewObject> vos = new ArrayList<>();
+        List<Question> questions = questionService.selectByLabel(label,offset,limit);
+        for (Question question : questions) {
+            ViewObject vo = new ViewObject();
+            User user = userService.selectById(question.getUserId());
+            String description = question.getDescription();
+            question.setDescription(description.substring(0, description.length() > 100 ? 100 : description.length()));
+            vo.set("question",question);
+            vo.set("user",user);
+            vos.add(vo);
+        }
+        return vos;
     }
 
 

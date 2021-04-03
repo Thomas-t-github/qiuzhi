@@ -18,4 +18,14 @@
         ORDER BY created_date DESC
         LIMIT #{offset},#{limit}
     </select>
+
+    <select id="selectByLabel" resultType="com.tyt.qiuzhi.model.Question">
+        SELECT
+        <include refid="selectFields"/>
+        FROM
+        <include refid="table"/>
+        where label LIKE concat('%',#{label},'%')
+        ORDER BY created_date DESC
+        LIMIT #{offset},#{limit}
+    </select>
 </mapper>

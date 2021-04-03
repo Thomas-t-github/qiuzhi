@@ -56,6 +56,10 @@ public class QuestionService {
         return questionDAO.updateDescription(id,description);
     }
 
+    public List<Question> selectByLabel(String label,int offset,int limit){
+        return questionDAO.selectByLabel(label,offset,limit);
+    }
+
     public boolean deleteQuestion(int id){
         commentService.deleteComment(id, EntityType.ENTITY_QUESTION);
         return questionDAO.deleteQuestion(id);

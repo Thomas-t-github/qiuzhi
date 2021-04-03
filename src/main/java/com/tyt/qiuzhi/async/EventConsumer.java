@@ -3,6 +3,7 @@ package com.tyt.qiuzhi.async;
 import com.alibaba.fastjson.JSON;
 import com.tyt.qiuzhi.util.JedisAdapter;
 import com.tyt.qiuzhi.util.RedisKeyUtil;
+import lombok.SneakyThrows;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
@@ -49,19 +50,33 @@ public class EventConsumer implements InitializingBean,ApplicationContextAware {
                 while (true){
                     String key = RedisKeyUtil.getEventQueueKey();
                     List<String> brpop = jedisAdapter.brpop(0, key);
-                    for (String message : brpop) {
-                        if (message.equals(key)){
-                            continue;
-                        }
-                        EventModel eventModel = JSON.parseObject(message, EventModel.class);
-                        if (!config.containsKey(eventModel.getType())){
-                            logger.error("不能识别的事件");
-                            continue;
-                        }
-                        for (EventHandler handler : config.get(eventModel.getType())){
-                            handler.doHandle(eventModel);
-                        }
 
+                    if(brpop != null){
+                        for (String message : brpop) {
+                            if (message.equals(key)){
+                                continue;
+                            }
+                            EventModel eventModel = JSON.parseObject(message, EventModel.class);
+                            if (!config.containsKey(eventModel.getType())){
+                                logger.error("不能识别的事件");
+                                continue;
+                            }
+                            for (EventHandler handler : config.get(eventModel.getType())){
+                                handler.doHandle(eventModel);
+                            }
+
+                        }
+                    }else {
+                        String ping = jedisAdapter.ping();
+                        if (!"PONG".equals(ping)){
+                            logger.error("Redis ping failure!");
+                            throw new RuntimeException("Redis ping failure!");
+                        }
+                        try {
+                            Thread.sleep(1000*10);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
                     }
                 }
             }

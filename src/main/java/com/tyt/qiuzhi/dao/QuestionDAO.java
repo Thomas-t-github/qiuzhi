@@ -34,6 +34,9 @@ public interface QuestionDAO {
     @Select({"select ", SELECT_FIELDS ," from ", TABLE_NAME, " where id=#{id}"})
     Question selectById(int id);
 
+    List<Question> selectByLabel(@Param("label") String label, @Param("offset") int offset,
+                                 @Param("limit") int limit);
+
     @Delete({"delete from ", TABLE_NAME, " where id=#{id}"})
     boolean deleteQuestion(int id);
 

@@ -52,6 +52,24 @@ public class JedisAdapter implements InitializingBean {
         return null;
     }
 
+    public String ping(){
+
+        Jedis jedis = null;
+        try {
+            jedis = pool.getResource();
+            return jedis.ping();
+        } catch (Exception e) {
+            logger.error("Jedis发生异常" + e.getMessage());
+        } finally {
+            if (jedis != null) {
+                jedis.close();
+            }
+        }
+
+        return null;
+    }
+
+
     public String setex(String key,int seconds,String value){
 
         Jedis jedis = null;
