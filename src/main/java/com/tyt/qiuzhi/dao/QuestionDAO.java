@@ -16,6 +16,9 @@ public interface QuestionDAO {
     @Select({"select count(id) from ", TABLE_NAME})
     int selectQuestionsCount();
 
+    @Select({"select ", SELECT_FIELDS ," from ", TABLE_NAME})
+    List<Question> selectAll();
+
     @Insert({"insert into ", TABLE_NAME, "(", INSERT_FIELDS,
             ") values (#{title},#{description},#{label},#{reward},#{createdDate},#{userId},#{commentCount})"})
     @Options(useGeneratedKeys = true,keyProperty = "id",keyColumn = "id")

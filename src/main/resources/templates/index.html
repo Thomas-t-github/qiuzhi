@@ -27,7 +27,7 @@
                     <li>
                         <a href="/user/homepage/1" th:href="'/user/homepage/'+${vo.get('user').id}" class="fly-avatar">
                             <img th:src="${vo.get('user').headUrl}"
-                                 src="http://qpjew6rs9.hn-bkt.clouddn.com/ffac447bcd134ae98d349eddb9d0aa53.jpg"
+                                 src="http://images.tnnd.ren/ffac447bcd134ae98d349eddb9d0aa53.jpg"
                                  alt="Thomas">
                         </a>
                         <h2>
@@ -38,20 +38,20 @@
                                th:text="${label}">动态</a>
                         </h2>
                         <div class="fly-list-info">
-                            <a href="/user/homepage/1" link>
+                            <a href="/user/homepage/1" th:href="'/user/homepage/'+${vo.get('user').id}" link>
                                 <cite th:text="${vo.get('user').nickName}">Thomas</cite>
                                 <i class="iconfont icon-renzheng" title="认证信息：XXX"></i>
                                 <i class="layui-badge fly-badge-vip">VIP3</i>
                             </a>
-                            <span th:text="${#dates.format(vo.get('user').createdDate,'yyyy-MM-dd HH:mm:ss')}">刚刚</span>
+                            <span th:text="${#dates.format(vo.get('question').createdDate,'yyyy-MM-dd HH:mm:ss')}">刚刚</span>
 
                             <span class="fly-list-kiss layui-hide-xs" title="悬赏飞吻"
                                   th:text="${vo.get('question').reward}"><i class="iconfont icon-kiss"></i> 60</span>
                             <span class="layui-badge fly-badge-accept layui-hide-xs">已结</span>
                             <span class="fly-list-nums">
-                <i class="iconfont icon-pinglun1" title="回答"></i> <span
-                                    th:text="${vo.get('question').commentCount}">16</span>
-              </span>
+                                <i class="iconfont icon-pinglun1" title="回答"></i>
+                                <span th:text="${vo.get('question').commentCount}">16</span>
+                            </span>
                         </div>
                         <div class="fly-list-badge">
                             <!--
@@ -92,7 +92,7 @@
                     &lt;!&ndash;资讯&ndash;&gt;
                     <li>
                         <a href="/user/homepage/1" class="fly-avatar">
-                            <img src="http://qpjew6rs9.hn-bkt.clouddn.com/ffac447bcd134ae98d349eddb9d0aa53.jpg"
+                            <img src="http://images.tnnd.ren/ffac447bcd134ae98d349eddb9d0aa53.jpg"
                                  alt="Thomas">
                         </a>
                         <h2>
@@ -121,7 +121,7 @@
                     </li>
                     <li>
                         <a href="/user/homepage/1" class="fly-avatar">
-                            <img src="http://qpjew6rs9.hn-bkt.clouddn.com/ffac447bcd134ae98d349eddb9d0aa53.jpg"
+                            <img src="http://images.tnnd.ren/ffac447bcd134ae98d349eddb9d0aa53.jpg"
                                  alt="Thomas">
                         </a>
                         <h2>
@@ -150,7 +150,7 @@
                     </li>
                     <li>
                         <a href="/user/homepage/1" class="fly-avatar">
-                            <img src="http://qpjew6rs9.hn-bkt.clouddn.com/ffac447bcd134ae98d349eddb9d0aa53.jpg"
+                            <img src="http://images.tnnd.ren/ffac447bcd134ae98d349eddb9d0aa53.jpg"
                                  alt="Thomas">
                         </a>
                         <h2>
@@ -179,7 +179,7 @@
                     </li>
                     <li>
                         <a href="/user/homepage/1" class="fly-avatar">
-                            <img src="http://qpjew6rs9.hn-bkt.clouddn.com/ffac447bcd134ae98d349eddb9d0aa53.jpg"
+                            <img src="http://images.tnnd.ren/ffac447bcd134ae98d349eddb9d0aa53.jpg"
                                  alt="Thomas">
                         </a>
                         <h2>
@@ -208,7 +208,7 @@
                     </li>
                     <li>
                         <a href="/user/homepage/1" class="fly-avatar">
-                            <img src="http://qpjew6rs9.hn-bkt.clouddn.com/ffac447bcd134ae98d349eddb9d0aa53.jpg"
+                            <img src="http://images.tnnd.ren/ffac447bcd134ae98d349eddb9d0aa53.jpg"
                                  alt="Thomas">
                         </a>
                         <h2>
@@ -237,7 +237,7 @@
                     </li>
                     <li>
                         <a href="/user/homepage/1" class="fly-avatar">
-                            <img src="http://qpjew6rs9.hn-bkt.clouddn.com/ffac447bcd134ae98d349eddb9d0aa53.jpg"
+                            <img src="http://images.tnnd.ren/ffac447bcd134ae98d349eddb9d0aa53.jpg"
                                  alt="Thomas">
                         </a>
                         <h2>
@@ -266,7 +266,7 @@
                     </li>
                     <li>
                         <a href="/user/homepage/1" class="fly-avatar">
-                            <img src="http://qpjew6rs9.hn-bkt.clouddn.com/ffac447bcd134ae98d349eddb9d0aa53.jpg"
+                            <img src="http://images.tnnd.ren/ffac447bcd134ae98d349eddb9d0aa53.jpg"
                                  alt="Thomas">
                         </a>
                         <h2>
@@ -295,7 +295,7 @@
                     </li>
                     <li>
                         <a href="/user/homepage/1" class="fly-avatar">
-                            <img src="http://qpjew6rs9.hn-bkt.clouddn.com/ffac447bcd134ae98d349eddb9d0aa53.jpg"
+                            <img src="http://images.tnnd.ren/ffac447bcd134ae98d349eddb9d0aa53.jpg"
                                  alt="Thomas">
                         </a>
                         <h2>
@@ -324,7 +324,7 @@
                     </li>
                     <li>
                         <a href="/user/homepage/1" class="fly-avatar">
-                            <img src="http://qpjew6rs9.hn-bkt.clouddn.com/ffac447bcd134ae98d349eddb9d0aa53.jpg"
+                            <img src="http://images.tnnd.ren/ffac447bcd134ae98d349eddb9d0aa53.jpg"
                                  alt="Thomas">
                         </a>
                         <h2>
@@ -353,7 +353,7 @@
                     </li>
                     <li>
                         <a href="/user/homepage/1" class="fly-avatar">
-                            <img src="http://qpjew6rs9.hn-bkt.clouddn.com/ffac447bcd134ae98d349eddb9d0aa53.jpg"
+                            <img src="http://images.tnnd.ren/ffac447bcd134ae98d349eddb9d0aa53.jpg"
                                  alt="Thomas">
                         </a>
                         <h2>
@@ -404,7 +404,7 @@
                     <div carousel-item="">
                         <div th:each="images:${advertisement.getImageUrl()}">
                             <a th:href="${advertisement.getSiteLink()}">
-                                <img th:src="${images}" class="pic" style="width: 100%;height: auto" src="http://qpjew6rs9.hn-bkt.clouddn.com/ffac447bcd134ae98d349eddb9d0aa53.jpg">
+                                <img th:src="${images}" class="pic" style="width: 100%;height: auto" src="http://images.tnnd.ren/ffac447bcd134ae98d349eddb9d0aa53.jpg">
                             </a>
                         </div>
                     </div>
@@ -454,42 +454,42 @@
                     <!--<i class="layui-icon fly-loading">&#xe63d;</i>-->
                     <dd>
                         <a href="/user/homepage/1">
-                            <img src="http://qpjew6rs9.hn-bkt.clouddn.com/ffac447bcd134ae98d349eddb9d0aa53.jpg"><cite>Thomas</cite><i>106次回答</i>
+                            <img src="http://images.tnnd.ren/ffac447bcd134ae98d349eddb9d0aa53.jpg"><cite>Thomas</cite><i>106次回答</i>
                         </a>
                     </dd>
                     <dd>
                         <a href="/user/homepage/1">
-                            <img src="http://qpjew6rs9.hn-bkt.clouddn.com/ffac447bcd134ae98d349eddb9d0aa53.jpg"><cite>Thomas</cite><i>106次回答</i>
+                            <img src="http://images.tnnd.ren/ffac447bcd134ae98d349eddb9d0aa53.jpg"><cite>Thomas</cite><i>106次回答</i>
                         </a>
                     </dd>
                     <dd>
                         <a href="/user/homepage/1">
-                            <img src="http://qpjew6rs9.hn-bkt.clouddn.com/ffac447bcd134ae98d349eddb9d0aa53.jpg"><cite>Thomas</cite><i>106次回答</i>
+                            <img src="http://images.tnnd.ren/ffac447bcd134ae98d349eddb9d0aa53.jpg"><cite>Thomas</cite><i>106次回答</i>
                         </a>
                     </dd>
                     <dd>
                         <a href="/user/homepage/1">
-                            <img src="http://qpjew6rs9.hn-bkt.clouddn.com/ffac447bcd134ae98d349eddb9d0aa53.jpg"><cite>Thomas</cite><i>106次回答</i>
+                            <img src="http://images.tnnd.ren/ffac447bcd134ae98d349eddb9d0aa53.jpg"><cite>Thomas</cite><i>106次回答</i>
                         </a>
                     </dd>
                     <dd>
                         <a href="/user/homepage/1">
-                            <img src="http://qpjew6rs9.hn-bkt.clouddn.com/ffac447bcd134ae98d349eddb9d0aa53.jpg"><cite>Thomas</cite><i>106次回答</i>
+                            <img src="http://images.tnnd.ren/ffac447bcd134ae98d349eddb9d0aa53.jpg"><cite>Thomas</cite><i>106次回答</i>
                         </a>
                     </dd>
                     <dd>
                         <a href="/user/homepage/1">
-                            <img src="http://qpjew6rs9.hn-bkt.clouddn.com/ffac447bcd134ae98d349eddb9d0aa53.jpg"><cite>Thomas</cite><i>106次回答</i>
+                            <img src="http://images.tnnd.ren/ffac447bcd134ae98d349eddb9d0aa53.jpg"><cite>Thomas</cite><i>106次回答</i>
                         </a>
                     </dd>
                     <dd>
                         <a href="/user/homepage/1">
-                            <img src="http://qpjew6rs9.hn-bkt.clouddn.com/ffac447bcd134ae98d349eddb9d0aa53.jpg"><cite>Thomas</cite><i>106次回答</i>
+                            <img src="http://images.tnnd.ren/ffac447bcd134ae98d349eddb9d0aa53.jpg"><cite>Thomas</cite><i>106次回答</i>
                         </a>
                     </dd>
                     <dd>
                         <a href="/user/homepage/1">
-                            <img src="http://qpjew6rs9.hn-bkt.clouddn.com/ffac447bcd134ae98d349eddb9d0aa53.jpg"><cite>Thomas</cite><i>106次回答</i>
+                            <img src="http://images.tnnd.ren/ffac447bcd134ae98d349eddb9d0aa53.jpg"><cite>Thomas</cite><i>106次回答</i>
                         </a>
                     </dd>
                 </dl>
