@@ -32,6 +32,7 @@ public class SearchController {
         if ("".equals(keyword)){
             return "redirect:/";
         }
+        model.addAttribute("keyword",SEARCH_HLPRE+keyword+SEARCH_HLPOS);
         Map<String, Object> search = null;
         try {
             search = searchService.search(keyword, offset, count, SEARCH_HLPRE, SEARCH_HLPOS);

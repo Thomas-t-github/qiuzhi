@@ -53,6 +53,11 @@
                                 <span th:text="${vo.get('question').commentCount}">16</span>
                             </span>
                         </div>
+
+                        <div style="max-height: 300px" class="detail-body photos" th:utext="${vo.get('question').description}">
+                            无数据
+                        </div>
+
                         <div class="fly-list-badge">
                             <!--
                             <span class="layui-badge layui-bg-black">置顶</span>
@@ -617,11 +622,17 @@
         , base: '/static/res/mods/' //这里实际使用时，建议改成绝对路径
     }).extend({
         fly: 'index'
-    }).use('fly');
+    }).use(['fly', 'face'], function () {
+        var $ = layui.$
+            , fly = layui.fly;
+        //如果你是采用模版自带的编辑器，你需要开启以下语句来解析。
+        $('.detail-body').each(function () {
+            var othis = $(this), html = othis.html();
+            //othis.html(fly.content(html));
+            othis.html(html);
+        });
+    });
 </script>
-
-<script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
-document.write(unescape("%3Cspan id='cnzz_stat_icon_30088308'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "w.cnzz.com/c.php%3Fid%3D30088308' type='text/javascript'%3E%3C/script%3E"));</script>
 
 </body>
 </html>

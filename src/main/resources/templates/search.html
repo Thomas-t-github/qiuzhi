@@ -14,14 +14,14 @@
     <div class="layui-row layui-col-space15">
         <div class="layui-col-md12 fly-home-da">
             <div class="fly-panel" id="searchStyle">
-                <!--<h3 class="fly-panel-title" th:text="${owner.nickName}+' 最近的回答'">贤心 最近的回答</h3>-->
-                <div class="fly-none" th:if="${#lists.isEmpty(searchResult)}"
-                     style="min-height: 50px; padding:30px 0; height:auto;"><i style="font-size:14px;">没有任何结果,请换个条件搜索试试吧！</i>
+
+                <div class="fly-none"
+                     style="min-height: 10px; padding:5px 0; height:auto;"><i style="font-size:14px;" th:utext="${'符合查询条件 '+keyword+' 的结果有'+totalHits+'条'}">查询结果</i>
                 </div>
                 <ul class="fly-list" th:each="vo : ${searchResult}">
 
                     <!--每一条资讯-->
-
+                    <hr/>
                     <li>
                         <a href="/user/homepage/1" th:href="'/user/homepage/'+${vo.userId}" class="fly-avatar">
                             <img th:src="${vo.headUrl}"
@@ -61,6 +61,7 @@
                             -->
                         </div>
                     </li>
+
 
                 </ul>
             </div>
