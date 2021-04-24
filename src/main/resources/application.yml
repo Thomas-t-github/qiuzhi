@@ -66,6 +66,14 @@ spring:
     rest:
       uris: 47.96.97.43:9200
 
+  #配置rabbitmq服务
+  rabbitmq:
+    username: admin
+    password: myAdminPassword666
+    virtual-host: /
+    host: 47.96.97.43
+    port: 5672
+
 
 
 

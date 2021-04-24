@@ -30,8 +30,8 @@ public class AllowNewQuestionController {
     @Autowired
     JedisAdapter jedisAdapter;
 
-    @Autowired
-    EventProducer eventProducer;
+    /*@Autowired
+    EventProducer eventProducer;*/
 
 
     @RequestMapping(value = "/allowQuestion",method = RequestMethod.GET,produces={"application/json;charset=UTF-8"})
@@ -55,11 +55,11 @@ public class AllowNewQuestionController {
 
 
             //异步
-            eventProducer.fireEvent(new EventModel(EventType.VIOLATION_QUESTION)
+            /*eventProducer.fireEvent(new EventModel(EventType.VIOLATION_QUESTION)
             .setActorId(QiuzhiUtils.SYSTEM_USERID).setEntityId(id)
             .setEntityType(EntityType.ENTITY_QUESTION).setEntityOwnerId(question.getUserId())
             .setExt("createdDate",new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(question.getCreatedDate()))
-            .setExt("questionTitle",question.getTitle()));
+            .setExt("questionTitle",question.getTitle()));*/
 
             return QiuzhiUtils.getJSONString(0,"删除违规贴成功");
         }else {

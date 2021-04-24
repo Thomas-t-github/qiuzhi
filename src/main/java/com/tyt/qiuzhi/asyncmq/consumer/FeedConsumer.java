@@ -1,9 +1,10 @@
-package com.tyt.qiuzhi.async.handler;
+package com.tyt.qiuzhi.asyncmq.consumer;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.tyt.qiuzhi.async.EventHandler;
-import com.tyt.qiuzhi.async.EventModel;
-import com.tyt.qiuzhi.async.EventType;
+
+import com.tyt.qiuzhi.asyncmq.EventModel;
+import com.tyt.qiuzhi.asyncmq.EventType;
 import com.tyt.qiuzhi.model.EntityType;
 import com.tyt.qiuzhi.model.Feed;
 import com.tyt.qiuzhi.model.Question;
@@ -14,34 +15,40 @@ import com.tyt.qiuzhi.service.QuestionService;
 import com.tyt.qiuzhi.service.UserService;
 import com.tyt.qiuzhi.util.JedisAdapter;
 import com.tyt.qiuzhi.util.RedisKeyUtil;
+import org.springframework.amqp.rabbit.annotation.RabbitHandler;
+import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
-//@Component
-public class FeedHandler implements EventHandler {
-
-    @Autowired
-    UserService userService;
-
-    @Autowired
-    QuestionService questionService;
+@Component
+@RabbitListener(queues = {"feed.direct.queue"})
+public class FeedConsumer {
 
     @Autowired
     FeedService feedService;
 
     @Autowired
+    UserService userService;
+
+    @Autowired
     FollowService followService;
+
+    @Autowired
+    QuestionService questionService;
 
     @Autowired
     JedisAdapter jedisAdapter;
 
-    @Override
-    public void doHandle(EventModel eventModel) {
+
+    @RabbitHandler
+    public void doHandler(String eventModelString){
+
+        EventModel eventModel = JSON.parseObject(eventModelString, EventModel.class);
+
         Feed feed = new Feed();
         feed.setType(eventModel.getType().getValue());
         feed.setUserId(eventModel.getActorId());
@@ -61,11 +68,6 @@ public class FeedHandler implements EventHandler {
         }
     }
 
-    @Override
-    public List<EventType> getSupportEventTypes() {
-        return Arrays.asList(new EventType[]{EventType.COMMENT,EventType.FOLLOW});
-    }
-
     private String buildFeedData(EventModel eventModel){
         HashMap<String, String> map = new HashMap<>();
 
@@ -78,7 +80,7 @@ public class FeedHandler implements EventHandler {
         map.put("nickName",user.getNickName());
 
         if (eventModel.getType() == EventType.FOLLOW &&
-                        eventModel.getEntityType() == EntityType.ENTITY_USER){
+                eventModel.getEntityType() == EntityType.ENTITY_USER){
             User entityUser = userService.selectById(eventModel.getEntityId());
             if (entityUser == null){
                 return null;
@@ -104,4 +106,5 @@ public class FeedHandler implements EventHandler {
 
         return null;
     }
+
 }

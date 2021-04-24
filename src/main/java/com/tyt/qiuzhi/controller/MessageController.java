@@ -106,11 +106,8 @@ public class MessageController {
             if (hostHolder.getUser() == null){
                 return "redirect:/user/toLogin";
             }
-
             List<Message> conversationList = messageService.getConversationList(hostHolder.getUser().getId(), 0, 10);
             List<ViewObject> vos1 = new ArrayList<>();
-
-
             for (Message message : conversationList) {
                 ViewObject vo = new ViewObject();
                 int targetId = hostHolder.getUser().getId() == message.getFromId() ? message.getToId() : message.getFromId();
@@ -121,14 +118,11 @@ public class MessageController {
                 vo.set("messageCount",messageService.getMessageCount(message.getConversationId()));
                 vos1.add(vo);
             }
-
             model.addAttribute("conversations",vos1);
             for (ViewObject viewObject : vos1) {
                 System.out.println("数据："+viewObject.get("listUser"));
             }
-
             List<Message> conversationDetail = messageService.getConversationDetail(conversationId, 0, 10);
-
             List<ViewObject> vos = new ArrayList<>();
             int detailUserId = 1;
             for (Message message : conversationDetail) {

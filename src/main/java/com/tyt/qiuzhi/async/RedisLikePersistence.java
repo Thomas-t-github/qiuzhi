@@ -37,7 +37,7 @@ public class RedisLikePersistence implements InitializingBean {
                     String commentId = jedisAdapter.spop(setKey);
                     if (commentId == null) {
                         try {
-                            Thread.sleep(1000 * 10);
+                            Thread.sleep(1000 * 3);
                         } catch (InterruptedException e) {
                             logger.error("Redis持久化LikeCount失败：" + e.getMessage());
                         }

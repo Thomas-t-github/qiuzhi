@@ -1,6 +1,9 @@
 package com.tyt.qiuzhi.controller;
 
-import com.tyt.qiuzhi.async.EventProducer;
+import com.tyt.qiuzhi.asyncmq.EventModel;
+import com.tyt.qiuzhi.asyncmq.EventProducer;
+import com.tyt.qiuzhi.asyncmq.EventType;
+import com.tyt.qiuzhi.model.Comment;
 import com.tyt.qiuzhi.model.EntityType;
 import com.tyt.qiuzhi.model.HostHolder;
 import com.tyt.qiuzhi.service.CommentService;
@@ -53,8 +56,8 @@ public class LikeController {
         jedisAdapter.sadd(RedisKeyUtil.getLikeCountSetKey(),String.valueOf(commentId));
 
         //发送异步事件
-        /*Comment comment = commentService.selectById(commentId);
-        eventProducer.fireEvent(new EventModel(EventType.LIKE)
+       /* Comment comment = commentService.selectById(commentId);
+        eventProducer.fireEvent("feed",new EventModel(EventType.LIKE)
                 .setActorId(hostHolder.getUser().getId()).setEntityId(commentId)
                 .setEntityType(EntityType.ENTITY_COMMENT).setEntityOwnerId(comment.getUserId())
                 .setExt("questionId",String.valueOf(comment.getEntityId())));*/

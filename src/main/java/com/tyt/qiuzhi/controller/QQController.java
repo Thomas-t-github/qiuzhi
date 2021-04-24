@@ -6,13 +6,14 @@ import com.qq.connect.api.qzone.UserInfo;
 import com.qq.connect.javabeans.AccessToken;
 import com.qq.connect.javabeans.qzone.UserInfoBean;
 import com.qq.connect.oauth.Oauth;
-import com.tyt.qiuzhi.async.EventModel;
-import com.tyt.qiuzhi.async.EventProducer;
-import com.tyt.qiuzhi.async.EventType;
+import com.tyt.qiuzhi.asyncmq.EventModel;
+import com.tyt.qiuzhi.asyncmq.EventProducer;
+import com.tyt.qiuzhi.asyncmq.EventType;
 import com.tyt.qiuzhi.model.EntityType;
 import com.tyt.qiuzhi.model.User;
 import com.tyt.qiuzhi.service.OauthServer;
 import com.tyt.qiuzhi.service.UserService;
+import com.tyt.qiuzhi.util.QiuzhiUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
 
@@ -85,13 +87,17 @@ public class QQController {
                 if (oauth == null){
                     User user = oauthServer.addOauth(accessToken, openID, EntityType.ENTITY_QQ);
                     userId = user.getId();
-                    eventProducer.fireEvent(new EventModel(EventType.QQ_LOGIN).setActorId(userId)
-                            .setExt("content","尊敬的用户"+user.getNickName()+",恭喜您通过QQ第三方应用成功在本网站注册，默认密码是12345678，请尽快修改密码和修改邮箱，以免对您的正常使用造成影响！"));
+
+                    eventProducer.fireEvent("message",new EventModel(EventType.QQ_LOGIN)
+                            .setActorId(QiuzhiUtils.SYSTEM_USERID).setEntityOwnerId(userId)
+                            .setExt("content","尊敬的用户"+user.getNickName()+",恭喜您于"+new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date())+"通过QQ第三方应用成功在本网站注册，默认密码是12345678，请尽快修改密码和修改邮箱，以免对您的正常使用造成影响！"));
                 }else {
                     userId = oauth.getUserId();
                     User user = userService.selectById(userId);
-                    eventProducer.fireEvent(new EventModel(EventType.QQ_LOGIN).setActorId(userId)
-                            .setExt("content","尊敬的用户"+user.getNickName()+",您刚刚通过QQ第三方授权登录本网站，如果未绑定有效邮箱，请到我的资料进邮箱修改验证，以免对您的正常使用造成影响！"));
+
+                    eventProducer.fireEvent("message",new EventModel(EventType.QQ_LOGIN)
+                            .setActorId(QiuzhiUtils.SYSTEM_USERID).setEntityOwnerId(userId)
+                            .setExt("content","尊敬的用户"+user.getNickName()+" ,您于"+new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date())+"通过QQ第三方授权登录本网站，如果未绑定有效邮箱，请到我的资料进邮箱修改验证，以免对您的正常使用造成影响,如已修改，请忽略本次提示！"));
 
                 }
                 if (userId < 0){

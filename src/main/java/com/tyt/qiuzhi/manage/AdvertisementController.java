@@ -51,23 +51,18 @@ public class AdvertisementController {
         if (images == null && images.size() == 0){
             return QiuzhiUtils.getJSONString(1,"未上传图片");
         }
-
         try {
-
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             Advertisement advertisement = new Advertisement();
-
             advertisement.setTitle(title);
             advertisement.setSiteLink(siteLink);
             advertisement.setStartDate(dateFormat.parse(endDate));
             advertisement.setEndDate(dateFormat.parse(startDate));
             advertisement.setImageUrl(images);
-
             int time = (int) (dateFormat.parse(endDate).getTime()-dateFormat.parse(startDate).getTime());
             jedisAdapter.setex(RedisKeyUtil.getBizAdvertisementKey(),
                     time < 0 ? Integer.MAX_VALUE : time,
                     JSONObject.toJSONString(advertisement));
-
             jedisAdapter.del(RedisKeyUtil.getBizAdvertisementImageKey());
             return QiuzhiUtils.getJSONString(0,"设置广告成功");
         } catch (ParseException e) {

@@ -1,8 +1,9 @@
 package com.tyt.qiuzhi.controller;
 
-import com.tyt.qiuzhi.async.EventModel;
-import com.tyt.qiuzhi.async.EventProducer;
-import com.tyt.qiuzhi.async.EventType;
+
+import com.tyt.qiuzhi.asyncmq.EventModel;
+import com.tyt.qiuzhi.asyncmq.EventProducer;
+import com.tyt.qiuzhi.asyncmq.EventType;
 import com.tyt.qiuzhi.model.EntityType;
 import com.tyt.qiuzhi.model.HostHolder;
 import com.tyt.qiuzhi.service.CommentService;
@@ -49,7 +50,7 @@ public class FollowController {
         boolean ret = followService.follow(hostHolder.getUser().getId(), EntityType.ENTITY_USER, userId);
 
         //异步
-        eventProducer.fireEvent(new EventModel(EventType.FOLLOW)
+        eventProducer.fireEvent("feed",new EventModel(EventType.FOLLOW)
                 .setActorId(hostHolder.getUser().getId()).setEntityType(EntityType.ENTITY_USER)
                 .setEntityId(userId).setEntityOwnerId(userId));
 

@@ -2,6 +2,9 @@ package com.tyt.qiuzhi.controller;
 
 import cn.hutool.extra.mail.MailUtil;
 import com.alibaba.fastjson.JSONObject;
+import com.tyt.qiuzhi.asyncmq.EventModel;
+import com.tyt.qiuzhi.asyncmq.EventProducer;
+import com.tyt.qiuzhi.asyncmq.EventType;
 import com.tyt.qiuzhi.model.*;
 import com.tyt.qiuzhi.service.*;
 import com.tyt.qiuzhi.util.JedisAdapter;
@@ -53,6 +56,10 @@ public class UserController {
 
     @Autowired
     FollowService followService;
+
+    @Autowired
+    EventProducer eventProducer;
+
 
     @RequestMapping(value = "/setNewPassword",method = RequestMethod.POST)
     @ResponseBody
@@ -168,31 +175,15 @@ public class UserController {
     @ResponseBody
     public String sendEmail(@RequestParam("email") String email){
 
-        HashMap<String, Object> map = new HashMap<>();
-
-        String vercode = String.format("%04d", new Random().nextInt(9999));
-
-        map.put("vercode",vercode);
         User user = userService.selectByEmail(email);
+        String nickName = email;
         if (user != null){
-            map.put("username",user.getNickName());
-        }else {
-            map.put("username",email);
+            nickName = user.getNickName();
         }
+        eventProducer.fireEvent("email",new EventModel(EventType.MAIL)
+                .setExt("email",email).setExt("nickName",nickName));
 
-        Context context = new Context();
-        context.setVariables(map);
-        String process = templateEngine.process("mail/vercode", context);
-
-        try {
-            MailUtil.send(email, "职享网", process, true);
-        } catch (Exception e) {
-            return QiuzhiUtils.getJSONString(1,"发送验证码失败："+(e.getMessage().contains("Invalid Addresses") ? "非法邮箱，请输入有效邮箱" : e.getMessage()));
-        }
-
-        jedisAdapter.setex(RedisKeyUtil.getVerCodeKey(email),60*5,vercode);
-
-        return QiuzhiUtils.getJSONString(0,"验证码发送成功");
+        return QiuzhiUtils.getJSONString(0,"验证码已发送,如果一分钟后未收到验证码，请重新尝试！");
     }
 
 
@@ -209,12 +200,8 @@ public class UserController {
         if (hostHolder.getUser() == null){
             return "redirect:/user/toLogin";
         }
-
         ArrayList<ViewObject> vos = new ArrayList<>();
-
         List<Collect> collects = collectService.selectByUserId(hostHolder.getUser().getId());
-
-
         for (Collect collect : collects) {
             ViewObject vo = new ViewObject();
             Question question = questionService.selectById(collect.getEntityId());
@@ -222,13 +209,9 @@ public class UserController {
             vo.set("question",question);
             vos.add(vo);
         }
-
         List<Question> questions = questionService.selectLatestQuestions(hostHolder.getUser().getId(), 0, 10);
-
         model.addAttribute("questions",questions);
-
         model.addAttribute("vos",vos);
-
         return "user/index";
     }
 

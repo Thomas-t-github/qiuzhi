@@ -1,8 +1,8 @@
 package com.tyt.qiuzhi.controller;
 
-import com.tyt.qiuzhi.async.EventModel;
-import com.tyt.qiuzhi.async.EventProducer;
-import com.tyt.qiuzhi.async.EventType;
+import com.tyt.qiuzhi.asyncmq.EventModel;
+import com.tyt.qiuzhi.asyncmq.EventProducer;
+import com.tyt.qiuzhi.asyncmq.EventType;
 import com.tyt.qiuzhi.model.Comment;
 import com.tyt.qiuzhi.model.EntityType;
 import com.tyt.qiuzhi.model.HostHolder;
@@ -57,7 +57,6 @@ public class CommentController {
             result.put("msg","帖子不存在！");
             return result;
         }
-
         try {
             if (StringUtils.isBlank(content)){
                 result.put("status",1);
@@ -79,13 +78,10 @@ public class CommentController {
             comment.setStatus(0);
             comment.setLikeCount(0);
             commentService.addComment(comment);
-
             int commentCount = commentService.getCommentCount(comment.getEntityId(), comment.getEntityType());
             questionService.updateCommentCount(comment.getEntityId(),commentCount);
 
-            /*eventProducer.fireEvent(new EventModel(EventType.COMMENT)
-                    .setEntityId(questionId).setActorId(comment.getUserId()));*/
-            eventProducer.fireEvent(new EventModel(EventType.COMMENT)
+            eventProducer.fireEvent("feed",new EventModel(EventType.COMMENT)
                     .setActorId(hostHolder.getUser().getId()).setEntityType(EntityType.ENTITY_USER)
                     .setEntityId(questionId).setEntityOwnerId(question.getUserId())
                     .setExt("commentContent",content));

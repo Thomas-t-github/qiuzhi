@@ -1,9 +1,9 @@
 package com.tyt.qiuzhi.controller;
 
 import com.alibaba.fastjson.JSONObject;
-import com.tyt.qiuzhi.async.EventModel;
-import com.tyt.qiuzhi.async.EventProducer;
-import com.tyt.qiuzhi.async.EventType;
+import com.tyt.qiuzhi.asyncmq.EventModel;
+import com.tyt.qiuzhi.asyncmq.EventProducer;
+import com.tyt.qiuzhi.asyncmq.EventType;
 import com.tyt.qiuzhi.model.*;
 import com.tyt.qiuzhi.service.*;
 import com.tyt.qiuzhi.util.JedisAdapter;
@@ -113,18 +113,14 @@ public class QuestionController {
             question.setDescription(description);
             question.setReward(Integer.parseInt(reward));
             question.setLabel(LabelKeyUtil.getLabel(label,university,industry));
-
-            System.out.println(question);
-
             if (questionService.addQuestion(question) > 0){
 
-               /* eventProducer.fireEvent(new EventModel(EventType.ADD_QUESTION)
-                        .setActorId(hostHolder.getUser().getId()).setEntityId(question.getId())
-                        .setExt("title",question.getTitle()).setExt("description",question.getDescription()));
-*/
+                eventProducer.fireEvent("search",new EventModel(EventType.ADD_QUESTION)
+                        .setActorId(question.getUserId()).setEntityOwnerId(question.getUserId())
+                        .setEntityId(question.getId()).setEntityType(EntityType.ENTITY_QUESTION));
+
                 return QiuzhiUtils.getJSONString(0,"添加成功");
             }
-
         } catch (Exception e) {
             logger.error("添加问题："+e.getMessage());
         }

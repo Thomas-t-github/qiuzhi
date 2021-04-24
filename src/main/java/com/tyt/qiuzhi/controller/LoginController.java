@@ -1,11 +1,14 @@
 package com.tyt.qiuzhi.controller;
 
 
-import com.tyt.qiuzhi.async.EventModel;
-import com.tyt.qiuzhi.async.EventProducer;
-import com.tyt.qiuzhi.async.EventType;
+
+import com.tyt.qiuzhi.asyncmq.EventModel;
+import com.tyt.qiuzhi.asyncmq.EventProducer;
+import com.tyt.qiuzhi.asyncmq.EventType;
+import com.tyt.qiuzhi.model.User;
 import com.tyt.qiuzhi.service.UserService;
 import com.tyt.qiuzhi.util.JedisAdapter;
+import com.tyt.qiuzhi.util.QiuzhiUtils;
 import com.tyt.qiuzhi.util.RedisKeyUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,9 +16,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -61,7 +65,6 @@ public class LoginController {
             result.put("msg","请输入验证码！");
             return result;
         }
-
         String code = jedisAdapter.get(RedisKeyUtil.getVerCodeKey(email));
         if (code == null){
             result.put("status",2);
@@ -73,30 +76,18 @@ public class LoginController {
             result.put("msg","验证码错误！");
             return result;
         }
-
         int expiredTime = 1;
         if (rememberme == true) {
             expiredTime = 5;
         }
-
         Map<String, Object> map = userService.register(email, password, nickName, expiredTime);
-
         try {
-
-
 
             if (map.containsKey("ticket")) {
                 Cookie cookie = new Cookie("ticket", map.get("ticket").toString());
                 cookie.setPath("/");
-
                 cookie.setMaxAge(3600 * 24 * expiredTime);
-
                 response.addCookie(cookie);
-
-                /*if (StringUtils.isNotBlank(next)){
-                    return "redirect:/";
-                }*/
-                //return "redirect:/";
                 result.put("status",0);
                 result.put("msg","注册成功！");
                 return result;
@@ -107,11 +98,9 @@ public class LoginController {
             }
         } catch (Exception e) {
             logger.error("注册异常：" + e.getMessage());
-            //model.addAttribute("msg", "服务器错误");
             map.put("msg", "服务器错误");
             return map;
         }
-
     }
 
     @RequestMapping("/toReg")
@@ -134,25 +123,6 @@ public class LoginController {
                         HttpServletResponse response){
 
         Map<String, Object> result = new HashMap<>();
-
-        /*if ("".equals(vercode)){
-            result.put("status",1);
-            result.put("msg","请输入验证码！");
-            return result;
-        }
-
-        String code = jedisAdapter.get(RedisKeyUtil.getVerCodeKey(email));
-        if (code == null){
-            result.put("status",2);
-            result.put("msg","请先获取验证码！");
-            return result;
-        }
-        if (!vercode.equals(code)){
-            result.put("status",3);
-            result.put("msg","验证码错误！");
-            return result;
-        }*/
-
         try {
             int expiredTime = 1;
             if (rememberme == true){
@@ -163,35 +133,22 @@ public class LoginController {
             if (map.containsKey("ticket")){
                 Cookie cookie = new Cookie("ticket",map.get("ticket").toString());
                 cookie.setPath("/");
-
                 cookie.setMaxAge(3600*24*expiredTime);
-
                 response.addCookie(cookie);
 
-                //异步
-                /*String ip = IpUtils.getIpAddr(request);
-                eventProducer.fireEvent(new EventModel(EventType.LOGIN)
-                        .setExt("email","2360564158@qq.com")
-                        .setExt("username",username)
-                        .setExt("ip",ip));
 
-                */
-                eventProducer.fireEvent(new EventModel(EventType.LOGIN)
-                        .setExt("email","2360564158@qq.com"));
+                User user = userService.selectByEmail(email);
 
+                eventProducer.fireEvent("message",new EventModel(EventType.LOGIN)
+                        .setActorId(QiuzhiUtils.SYSTEM_USERID).setEntityOwnerId(user.getId())
+                        .setExt("content","尊敬的用户："+user.getNickName()+" ,你于"+new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date())+"登录了本求职经验网站，如果不是您的操作，请尽快修改密码"));
 
-
-                /*if (StringUtils.isNotBlank(next)){
-                    return "redirect:"+next;
-                }
-                return "redirect:/";*/
 
                 result.put("status",0);
                 result.put("msg","登录成功！");
                 if (!"".equals(next)){
                     result.put("next",next);
                 }
-
                 return result;
             }else {
                 result.put("msg",map.get("msg"));
