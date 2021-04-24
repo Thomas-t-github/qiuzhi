@@ -62,6 +62,8 @@ spring:
   #spring-session 使用
   session:
     store-type: NONE
+
+  #ElasticSearch
   elasticsearch:
     rest:
       uris: 47.96.97.43:9200
@@ -75,15 +77,10 @@ spring:
     port: 5672
 
 
-
-
 #logging
 logging:
   level:
     com.tyt.qiuzhi.dao: debug
-
-
-
 
 
 
@@ -93,4 +90,9 @@ mybatis:
     map-underscore-to-camel-case: true
 
 
-#ElasticSearch
+#七牛云对象存储配置
+qiniu:
+  server:
+    accessKey: lFInkpSQR38XqRdqgJKSj0EfsBoO6hAM9STL7zAX
+    secretKey: MKyBrKNh3vCkrnGcdCtd_YE9FiWztNMe6sfxgY9p
+    bucket: newqiuzhi

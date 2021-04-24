@@ -10,6 +10,7 @@ import com.qiniu.util.Auth;
 import com.tyt.qiuzhi.util.QiuzhiUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -21,6 +22,14 @@ public class QiniuService {
 
     private static final Logger logger = LoggerFactory.getLogger(QiniuService.class);
 
+    @Value("${qiniu.server.accessKey}")
+    private String accessKey;
+
+    @Value("${qiniu.server.secretKey}")
+    private String secretKey;
+
+    @Value("${qiniu.server.bucket}")
+    private String bucket;
 
     public String saveImage(MultipartFile file) throws IOException {
 
@@ -29,9 +38,14 @@ public class QiniuService {
         //...其他参数参考类注释
         UploadManager uploadManager = new UploadManager(cfg);
         //...生成上传凭证，然后准备上传
+
+        /*
+        //采用配置文件的方式进行配置
         String accessKey = "lFInkpSQR38XqRdqgJKSj0EfsBoO6hAM9STL7zAX";
         String secretKey = "MKyBrKNh3vCkrnGcdCtd_YE9FiWztNMe6sfxgY9p";
         String bucket = "newqiuzhi";
+        */
+
         //如果是Windows情况下，格式是 D:\\qiniu\\test.png
         //String localFilePath = "/home/qiniu/test.png";
         //默认不指定key的情况下，以文件内容的hash值作为文件名
