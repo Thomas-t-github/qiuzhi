@@ -41,9 +41,9 @@ public class QiniuService {
 
         /*
         //采用配置文件的方式进行配置
-        String accessKey = "lFInkpSQR38XqRdqgJKSj0EfsBoO6hAM9STL7zAX";
-        String secretKey = "MKyBrKNh3vCkrnGcdCtd_YE9FiWztNMe6sfxgY9p";
-        String bucket = "newqiuzhi";
+        String accessKey = "******";
+        String secretKey = "******";
+        String bucket = "******";
         */
 
         //如果是Windows情况下，格式是 D:\\qiniu\\test.png
